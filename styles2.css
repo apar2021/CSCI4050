@@ -61,4 +61,29 @@ button {
     cursor: pointer;
     background-color: rgb(41, 4, 164);
   }
-      
+      .breadcrumb {
+      display: flex;
+      list-style: none;
+    }
+ 
+    .breadcrumb li {
+      padding: 10px;
+    }
+ 
+    .breadcrumb li:after {
+      content: "/";
+      margin-left: 20px;
+    }
+ 
+    .breadcrumb li:last-child:after {
+      content: "";
+    }
+ 
+    .breadcrumb a {
+      color: black;
+      text-decoration: none;
+    }
+ 
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
