@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Online Bookstore</title>
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 300px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      border-radius: 4px;
+    }
+    input[type="submit"] {
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>Search View</h1>
+  
+  <form id="search-form" action="/search" method="GET">
+    <input type="text" id="search-input" name="query" placeholder="Search..." required>
+    
+    <select id="search-criteria" name="criteria">
+      <option value="title">Search by Title</option>
+      <option value="author">Search by Author</option>
+      <option value="genre">Search by Genre</option>
+    </select>
+    
+    <button type="submit">Search</button>
+  </form>
+</body>
+</html>
