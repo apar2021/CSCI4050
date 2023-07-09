@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    
+    h1 {
+      margin-bottom: 10px;
+    }
+    
+    .cart {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .cart-details {
+      margin-bottom: 10px;
+    }
+    
+    .remove-button {
+      background-color: #f44336;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    
+    .checkout-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      width: 100%;
+    }
+    
+    .quantity-input {
+      width: 50px;
+      text-align: center;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cart</h1>
+  
+  <div class="cart">
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Book Title</th>
+          <th>Author</th>
+          <th>Price</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>The Great Gatsby</td>
+          <td>F. Scott Fitzgerald</td>
+          <td>$10.99</td>
+          <td>
+            <input class="quantity-input" type="number" value="1" min="1">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <button class="remove-button">Remove from Cart</button>
+  </div>
+  
+  <button class="checkout-button">Proceed to Checkout</button>
+  
+</body>
+</html>
