@@ -6,23 +6,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register</title> 
     <style>
-      p{
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+      }
+
+      header {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        text-align: center;
+      }
+
+      header img {
+        height: 50px;
+        margin: 10px;
+      }
+
+      section {
+        background-color: white;
+        padding: 10px;
+      }
+
+      .breadcrumb ul {
+        list-style: none;
+        display: inline;
+        margin: 0;
+        padding: 0;
+      }
+
+      .breadcrumb ul li {
+        display: inline-block;
+        margin-right: 5px;
+        font-size: 14px;
+      }
+
+      .breadcrumb ul li a {
+        color: #333;
+        text-decoration: none;
+      }
+
+      .breadcrumb ul li a:hover {
+        text-decoration: underline;
+      }
+
+      p {
+        text-align: center;
         font-size: 30px;
+        margin-top: 50px;
+      }
+
+      h1 {
+        text-align: center;
+        font-size: 50px;
+        margin-top: 10px;
+      }
+
+      h2 {
+        text-align: center;
+        font-size: 30px;
+        margin-top: 10px;
+      }
+
+      button.email-error {
+        background-color: #333;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 20px;
+        margin: 0 auto;
+        display: block;
+        cursor: pointer;
+      }
+
+      button.email-error:hover {
+        background-color: white;
+        color: #333;
+        border: 2px solid #333;
       }
     </style>
   </head>
   <body>
     <header>
-        <img src="https://dummyimage.com/200x100/000/fff&text=Logo" alt="" />
-      </header>
-      <section>
-        <ol class="breadcrumb">
-          <ul><a href="">Home</a></ul>
-        </ol>
-      </section>
+      <img src="https://dummyimage.com/200x100/000/fff&text=Logo" alt="" />
+    </header>
+    <section>
+      <ol class="breadcrumb">
+        <ul><a href="">Home</a></ul>
+      </ol>
       <p><span>Registration Completed</span></p>
       <h1><span>You have successfully registered.</span></h1>
       <h2>Please check the confirmation email sent to ----. </h2>
       <h3><button class="email-error">Didn't get an email? Click here to resend.</button></h3>
+    </section>
   </body>
 </html>
