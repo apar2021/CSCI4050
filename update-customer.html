@@ -3,7 +3,82 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shopping Cart Update</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
+        h1, h2 {
+            margin: 20px 0;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        button.update-card1, button.update-card2 {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        button.update-card1:hover, button.update-card2:hover {
+            background-color: white;
+            color: #333;
+            border: 2px solid #333;
+        }
+
+        .update-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label.labels {
+            font-size: 20px;
+            margin-bottom: 10px;
+            display: block;
+            text-align: left;
+        }
+
+        input[type="form-control"] {
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button.update-form {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        button.update-form:hover {
+            background-color: white;
+            color: #333;
+            border: 2px solid #333;
+        }
+    </style>
     </head>
     <body>
         <h1>Card Info</h1>
@@ -26,4 +101,4 @@
                 <button class="update-form"> Update Address </button>
             </form>  
     </body>
-    </html>
+</html>
