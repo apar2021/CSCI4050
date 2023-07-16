@@ -4,3 +4,11 @@ Our Web Development Members were Rugved Gudapati, Jiya Patel, and Aparna Sajith.
 Our Java Developers were Aparna Sajith and Eric Vicente.
 Our Database Developer was Jackson Cown. 
 
+Our CSCI 4050 Project consists off:
+      Python 
+      HTML
+      CSS 
+      MYSQL
+      
+------------------------------------------------------------------------------------------------------------------------------------------------How to Compile Our Files 
+
