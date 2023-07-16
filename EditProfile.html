@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5EACF;
+            color: #4F583D;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #8A584C;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #8A584C;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #70463e;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Profile</h1>
+
+    <form>
+        <div class="section">
+            <h2>Name</h2>
+            <label for="first-name">First Name:</label>
+            <input type="text" id="first-name" name="first-name" required>
+
+            <label for="last-name">Last Name:</label>
+            <input type="text" id="last-name" name="last-name" required>
+        </div>
+    </form>
+
+    <form>
+        <div class="section">
+            <h2>Address</h2>
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required>
+
+            <label for="city">City:</label>
+            <input type="text" id="city" name="city" required>
+
+            <label for="state">State:</label>
+            <input type="text" id="state" name="state" required>
+
+            <label for="zip">Zip Code:</label>
+            <input type="text" id="zip" name="zip" required>
+        </div>
+    </form>
+
+    <form>
+        <div class="section">
+            <h2>Credit Card Information</h2>
+            <label for="card-number">Credit Card Number:</label>
+            <input type="text" id="card-number" name="card-number" required>
+
+            <label for="security-code">Security Code:</label>
+            <input type="text" id="security-code" name="security-code" class="security-code" required>
+        </div>
+
+        <div class="submit-button">
+            <input type="submit" value="Save Changes">
+        </div>
+    </form>
+</body>
+</html>
