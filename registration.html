@@ -1,139 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Register</title> 
-    <style>
-      form{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.container{
-    display: flex;
-    flex-direction: column;
-    width: 25vw;
-}
-h1, p{
-    text-align: center;
-}
-/* font family is added */
-body {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .container {
-    display: flex;
-    flex-direction: column;
-    width: 25vw;
-  }
-  
-  h1, p {
-    text-align: center;
-  }
-  
-  /* desired spacing for input fields */
-  input {
-    margin: 0.25em 0em 1em 0em;
-  }
-/* more styles added to beautify the input fields */
-input {
-    margin: 0.25em 0em 1em 0em;
-    outline: none;
-    padding: 0.5em;
-    border: none;
-    background-color: rgb(225, 225, 225);
-    border-radius: 0.25em;
-    color: black;
-  }
-/* styles for button */
-button {
-    padding: 0.75em;
-    border: none;
-    outline: none;
-    background-color: rgb(68, 18, 232);
-    color: white;
-    border-radius: 0.25em;
-  }
-  
-  /* hover functionality for button */
-  button:hover {
-    cursor: pointer;
-    background-color: rgb(41, 4, 164);
-  }
-      .breadcrumb {
-      display: flex;
-      list-style: none;
+<html>
+<head>
+  <title>Bookstore Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #F5EACF;
+      color: #4F583D;
+      padding: 20px;
     }
- 
-    .breadcrumb li {
+    h1 {
+      text-align: center;
+    }
+    form {
+      max-width: 300px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+    }
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    input[type="tel"] {
+      width: 100%;
       padding: 10px;
+      margin: 8px 0;
+      display: block;
+      border: 1px solid #8A584C;
+      box-sizing: border-box;
+      border-radius: 4px;
     }
- 
-    .breadcrumb li:after {
-      content: "/";
-      margin-left: 20px;
+    input[type="submit"] {
+      width: 100%;
+      background-color: #8A584C;
+      color: white;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
     }
- 
-    .breadcrumb li:last-child:after {
-      content: "";
+    input[type="submit"]:hover {
+      background-color: #70463e;
     }
- 
-    .breadcrumb a {
-      color: black;
-      text-decoration: none;
-    }
- 
-    .breadcrumb a:hover {
-      text-decoration: underline;
-    }
-    </style>
-  </head>
-  <body>
-    <header>
-        <img src="https://dummyimage.com/200x100/000/fff&text=Logo" alt="" />
-        <nav>
-          <ul>
-            <li><a href="best-sellers.html">Best Sellers</a></li>
-            <li><a href="">Offers</a></li>
-          </ul>
-        </nav>
-      </header>
-      <section>
-        <ol class="breadcrumb">
-          <li><a href="">Home</a></li>
-          <li><a href="book-page.html">Featured Books</a></li>
-        </ol>
-      </section>
-    <form>
-        <form>
-            <div>
-              <h1>Register</h1>
-              <p>Kindly fill in this form to register.</p>
-              <label for="username"><b>Username</b></label>
-              <input type="text" placeholder="Enter username" name="username" id="username" required/>
-      
-              <label for="email"><b>Email</b></label>
-              <input type="text" placeholder="Enter Email" name="email" id="email" required/>
-      
-              <label for="pwd"><b>Password</b></label>
-              <input type="password"  placeholder="Enter Password"  name="pwd"   id="pwd" required/>
-              <label for="pwd-repeat"><b>Repeat Password</b></label>
-              <input type="password" placeholder="Repeat Password" name="pwd-repeat" id="pwd-repeat"  required/>
-              <button type="submit">Register</button>
-            </div>
-            <div>
-              <p>Already have an account? <a href="#">Log in</a>.</p>
-            </div>
-          </form>
-      
-    </form>
-  </body>
+  </style>
+</head>
+<body>
+  <h1>Register</h1>
+  <form action="registration" method="post">
+    <fieldset>
+      <legend>Required Information</legend>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" id="confirm_password" name="confirm_password" required>
+    </fieldset>
+
+    <fieldset>
+      <legend>Address</legend>
+      <label for="street">Street:</label>
+      <input type="text" id="street" name="street">
+
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city">
+
+      <label for="state">State:</label>
+      <input type="text" id="state" name="state">
+
+      <label for="country">Country:</label>
+      <input type="text" id="country" name="country">
+
+      <label for="zipcode">Zipcode:</label>
+      <input type="text" id="zipcode" name="zipcode">
+    </fieldset>
+
+    <fieldset>
+      <legend>Payment Information</legend>
+      <label for="card_type">Card Type:</label>
+      <input type="text" id="card_type" name="card_type">
+
+      <label for="card_number">Card Number:</label>
+      <input type="text" id="card_number" name="card_number">
+
+      <label for="expiration_date">Expiration Date:</label>
+      <input type="text" id="expiration_date" name="expiration_date">
+    </fieldset>
+
+    <input type="submit" value="Register">
+  </form>
+</body>
 </html>
