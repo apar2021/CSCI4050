@@ -25,7 +25,8 @@
     }
     input[type="email"],
     input[type="password"],
-    input[type="text"] {
+    input[type="text"],
+    input[type="tel"] {
       width: 100%;
       padding: 10px;
       margin: 8px 0;
@@ -52,30 +53,54 @@
 <body>
   <h1>Register</h1>
   <form action="registration" method="post">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
+    <fieldset>
+      <legend>Required Information</legend>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
 
-    <label for="confirm_password">Confirm Password:</label>
-    <input type="password" id="confirm_password" name="confirm_password" required>
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" name="phone" required>
 
-    <label for="street">Street:</label>
-    <input type="text" id="street" name="street">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
 
-    <label for="city">City:</label>
-    <input type="text" id="city" name="city">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
 
-    <label for="state">State:</label>
-    <input type="text" id="state" name="state">
+      <label for="confirm_password">Confirm Password:</label>
+      <input type="password" id="confirm_password" name="confirm_password" required>
+    </fieldset>
 
-    <label for="country">Country:</label>
-    <input type="text" id="country" name="country">
+    <fieldset>
+      <legend>Address</legend>
+      <label for="street">Street:</label>
+      <input type="text" id="street" name="street">
 
-    <label for="zipcode">Zipcode:</label>
-    <input type="text" id="zipcode" name="zipcode">
-    
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city">
+
+      <label for="state">State:</label>
+      <input type="text" id="state" name="state">
+
+      <label for="country">Country:</label>
+      <input type="text" id="country" name="country">
+
+      <label for="zipcode">Zipcode:</label>
+      <input type="text" id="zipcode" name="zipcode">
+    </fieldset>
+
+    <fieldset>
+      <legend>Payment Information</legend>
+      <label for="card_type">Card Type:</label>
+      <input type="text" id="card_type" name="card_type">
+
+      <label for="card_number">Card Number:</label>
+      <input type="text" id="card_number" name="card_number">
+
+      <label for="expiration_date">Expiration Date:</label>
+      <input type="text" id="expiration_date" name="expiration_date">
+    </fieldset>
+
     <input type="submit" value="Register">
   </form>
 </body>
