@@ -2,85 +2,54 @@
 <html>
 <head>
   <title>Admin Page</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #F5EACF;
-      color: #4F583D;
-      padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #F5EACF;
+        color: #4F583D;
+        padding: 20px;
     }
-
-    .sidebar {
-      height: 100%;
-      width: 160px;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0;
-      background-color: black;
-      overflow-x: hidden;
-      padding-top: 16px;
-    }
-
-    .sidebar a {
-      padding: 6px 8px 6px 16px;
-      text-decoration: none;
-      font-size: 20px;
-      color: #818181;
-      display: block;
-    }
-
-    .sidebar a:hover {
-      color: #f1f1f1;
-    }
-
-    .main {
-      margin-left: 160px;
-      padding: 0px 10px;
-    }
-
-    @media screen and (max-height: 450px) {
-      .sidebar {
-        padding-top: 15px;
-      }
-
-      .sidebar a {
-        font-size: 18px;
-      }
-    }
-
+    
     h1 {
-      text-align: center;
-      margin-top: 0;
+        text-align: center;
     }
-
+    
+    .button {
+        display: block;
+        margin-bottom: 10px;
+        padding: 20px;
+        font-size: 18px;
+        text-align: center;
+        text-decoration: none;
+        background-color: #8A584C;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .button:hover {
+        background-color: #70463e;
+    }
+    
     .message {
-      max-width: 400px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
-
+    
     p {
-      margin: 0;
+        margin: 0;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <a href="#home"><i class="fa fa-fw fa-home"></i> Home</a>
-    <a href="#books"><i class="fa fa-fw fa-wrench"></i> Manage Books</a>
-    <a href="#users"><i class="fa fa-fw fa-user"></i> Manage Users</a>
-    <a href="#promotions"><i class="fa fa-fw fa-envelope"></i> Manage Promotions</a>
-  </div>
-  <div class="main">
-    <h1>Admin Page</h1>
-    <div class="message">
-      <p>You have logged in to the admin page and can access admin functionality using the sidebar.</p>
-    </div>
-  </div>
+  <h1>Admin Page</h1>
+  <a href="#" class="button">Edit User Account Data</a>
+  <a href="#" class="button">Edit Books</a>
+  <a href="#" class="button">Edit Promotions</a>
 </body>
 </html>
