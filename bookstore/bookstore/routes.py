@@ -1,6 +1,6 @@
-from bookstore import app
+from . import app
 from flask import render_template,redirect,url_for,flash,get_flashed_messages,request
-from models import Item, User
+from models import Item, User, Book
 from forms import RegisterForm,LoginForm,UserForm
 from bookstore import db
 from flask_login import login_user,logout_user,login_required
@@ -9,11 +9,15 @@ from flask_login import login_user,logout_user,login_required
 @app.route('/home')
 def home_page():
     return render_template('home.html')
+
+
 @app.route('/market')
 @login_required
 def market_page():
     items = Item.query.all()
-    return render_template('market.html',items=Books)
+    return render_template('market.html',items=Book)
+
+
 @app.route('/register')
 def register_page():
     form = RegisterForm()
@@ -28,6 +32,8 @@ def register_page():
         for err_msg in form.errors.values():
             flash(f'There was an error in creating a user: {err_msg}')
     return render_template('register.html')
+
+
 @app.route('/login',methods=['GET','POST'])
 def login_page():
     form = LoginForm()
@@ -42,16 +48,23 @@ def login_page():
 
 
     return render_template('login.html')
+
+
 @app.route('/logout')
 def logout_page():
     logout_user()
     flash("You have been logged out!",category='Info')
     return redirect(url_for('home_page'))
+
+
 @app.route('/update/<int:id>',methods=['GET','POST'])
 def update_profile(id):
     form = UserForm()
     update_user = User.query.get_or_404(id)
     if request.method =="POST":
         update_user.first_name= request.form['']
+
+""" 
 @app.route('/reset-password')
 def reset_password():
+     """

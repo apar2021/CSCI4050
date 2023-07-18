@@ -28,9 +28,27 @@ class User(db.Model, UserMixin):
 class Item(db.Model):
     id  = db.Column(db.Integer(),primary_key=True)
     name = db.Column(db.String(length=30),nullable=False,unique=True)
-    price = db.Column(db.Integer(),nullable=False)
+    price = db.Column(db.Float(),nullable=False)
     isbn = db.Column(db.String(length=15),nullable=False,unique=True)
     description = db.Column(db.String(length=1024),nullable=False,unique=True)
     owner = db.Column(db.Integer(),db.ForeignKey('user.id'))
     def __repr__(self):
         return f'Item {self.name}'
+    
+class Book(db.Model):
+    id = db.Column(db.Integer(),primary_key=True)
+    isbn = db.Column(db.String(length=15),nullable=False,unique=True)
+    title = db.Column(db.String(length=1024),nullable=False)
+    author = db.Column(db.String(length=150),nullable=False)
+    
+    edition = db.Column(db.String(length=150),nullable=False)
+    catergory = db.Column(db.String(length=150),nullable=False)
+    publisher = db.Column(db.String(length=1024),nullable=False)
+    publication_year = db.Column(db.String(length=30),nullable=False)
+    
+    quantity = db.Column(db.Integer(),nullable=False)
+    min_threshold = db.Column(db.Integer(),nullable=False)
+    buying_price = db.Column(db.Float(),nullable=False)
+    selling_price = db.Column(db.Float(),nullable=False)
+    
+
