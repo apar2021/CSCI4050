@@ -1,8 +1,8 @@
-from market import app
+from bookstore import app
 from flask import render_template,redirect,url_for,flash,get_flashed_messages,request
 from models import Item, User
 from forms import RegisterForm,LoginForm,UserForm
-from market import db
+from bookstore import db
 from flask_login import login_user,logout_user,login_required
 
 @app.route('/')
