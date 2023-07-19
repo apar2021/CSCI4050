@@ -24,3 +24,19 @@ class User(db.Model, UserMixin):
     card_type = db.Column(db.String(150))
     card_number = db.Column(db.Integer)
     expiration_date = db.Column(db.String(150))
+
+    def __init__(self, name, phone, email, password, 
+                 street="", city="", state="", country="", zipcode=None, card_type="", card_number=None, expiration_date=""):
+        self.name = name
+        self.phone = phone
+        self.email = email
+        self.password = password
+        self.street = street
+        self.city = city
+        self.state = state
+        self.country = country
+        self.zipcode = zipcode
+        self.card_type = card_type
+        self.card_number = card_number
+        self.expiration_date = expiration_date
+
