@@ -17,4 +17,13 @@ def cart():
 def order_history():
     return render_template('OrderHistory.html')
 
+@views.route('/editaccount', methods=['GET', 'POST'])
+@login_required
+def editaccount():
+    form = EditAccountForm()
+    if request.method == 'POST':
+        print('check data and submit')
+    else:
+        print('get data from db and add to form')
+
 
