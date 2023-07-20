@@ -25,8 +25,15 @@ class User(db.Model, UserMixin):
     card_number = db.Column(db.Integer)
     expiration_date = db.Column(db.String(150))
 
+    #reset password info
+
+    reset_token = db.Column(db.String(100), unique=True)  # Store the reset token
+    reset_token_expiration = db.Column(db.DateTime) 
+
+
     def __init__(self, name, phone, email, password, 
-                 street="", city="", state="", country="", zipcode=None, card_type="", card_number=None, expiration_date=""):
+                 street="", city="", state="", country="", zipcode=None, card_type="", card_number=None, expiration_date="",
+                 reset_token = None, reset_token_expiration = None):
         self.name = name
         self.phone = phone
         self.email = email
@@ -39,4 +46,6 @@ class User(db.Model, UserMixin):
         self.card_type = card_type
         self.card_number = card_number
         self.expiration_date = expiration_date
+        self.reset_token = reset_token
+        self.reset_token_expiration = reset_token_expiration
 

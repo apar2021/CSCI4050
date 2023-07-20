@@ -101,19 +101,37 @@
         <li><a href="OrderHistory.html">Order History</a></li>
     </ul>
 
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+        
+
+
+
     <h1>Login</h1>
 
-    <form>
+    <form action = '/login', method="post">
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
-
-        <input type="submit" value="Login">
+        
+    
+        <input type="submit" value="Login", onclick="location.href='Home.html'">
+        {{ form.csrf_token }}
 
         <div class="forgot-password">
-            <a href="ResetPasswordEmail.html">Forgot Password?</a>
+            <a href="{{ url_for('auth.forgot_password_email') }}">Forgot Password?</a>
         </div>
     </form>
 </body>
