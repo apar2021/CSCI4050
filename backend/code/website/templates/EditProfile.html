@@ -104,22 +104,40 @@
     </ul>
 
     <h1>Edit Profile</h1>
-
-    <fieldset>
+    {% block content %}
+    <form action="/" method="POST">
         <div class="section">
             <legend>Information</legend>
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required>
+            <p>
+        {{ form.name.label }}<br>
+        {{ current_user.name}}
+          </p>
+            <label for="username">User Name:</label>
+            <input type="text" id="user_name" name="name" required>
+                <p>
+        {{ form.username.label }}<br>
+        {{ current_user.id }}
+    </p>
             <label for="email">Email Address:</label>
             <label for="phone">Phone:</label>
             <input type="text" id="phone" name="phone" required>
-
+                <p>
+        {{ form.phone.label }}<br>
+        {{ current_user.phone }}
+    </p>
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
+                <p>
+        {{ form.password.label }}<br>
+        {{ current_user.password }}
+    </p>
         </div>
-    </fieldset>
-
-    <fieldset>
+    </form>
+{% endblock %}
+    {% block content %}
+    <form action="/" method="POST">
         <div class="section">
             <legend>Address</legend>
             <label for="street">Street:</label>
@@ -134,24 +152,36 @@
             <label for="zip">Zip Code:</label>
             <input type="text" id="zip" name="zip" required>
         </div>
-    </fieldset>
-
-    <fieldset>
+    </form>
+    {% endblock %}
+    {% block content %}
+    <form action="/" method="POST">
         <div class="section">
             <legend>Credit Card Information</legend>
-            <label for="card-type">Card Type:</label>
-            <input type="text" id="card-type" name="card-type" required>
-
-            <label for="card-number">Credit Card Number:</label>
-            <input type="text" id="card-number" name="card-number" required>
-
-            <label for="security-code">Security Code:</label>
+            <label for="card_type">Card Type:</label>
+            <input type="text" id="card_type" name="card_type" required>
+                <p>
+        {{ form.card_type.label }}<br>
+        {{ current_user.card_type }}
+    </p>
+            <label for="card_number">Credit Card Number:</label>
+            <input type="text" id="card_number" name="card_number" required>
+    <p>
+        {{ form.card_number.label }}<br>
+        {{ current_user.card_number }}
+    </p>
+            <label for="security_code">Security Code:</label>
             <input type="text" id="security-code" name="security-code" class="security-code" required>
+                <p>
+        {{ form.security_code.label }}<br>
+        {{ current_user.security_code }}
+    </p>
         </div>
 
         <div class="submit-button">
             <input type="submit" value="Save Changes">
         </div>
-    </fieldset>
+    </form>
+    {% endblock %}
 </body>
 </html>
