@@ -2,7 +2,6 @@ from flask import Flask,render_template
 from flask import UserMixin
 app = Flask(__name__)
 
-
 class User(db.Model,UserMixin):
      __tablename__="users"
     id = db.Column(db.Integer(),primary_key=True)
@@ -20,23 +19,6 @@ class User(db.Model,UserMixin):
     @password.setter
     def password(self,plain_text_password):
         self.password_hash = Bcrypt.generate_password_hash(plain_text_password).decode('UTF-8')
-class Item(db.Model):
-    id = db.Column(db.Integer(),primary_key=True)
-    isbn = db.Column(db.String(length=15),nullable=False,unique=True)
-    title = db.Column(db.String(length=1024),nullable=False)
-    author = db.Column(db.String(length=150),nullable=False)
-    
-    edition = db.Column(db.String(length=150),nullable=False)
-    catergory = db.Column(db.String(length=150),nullable=False)
-    publisher = db.Column(db.String(length=1024),nullable=False)
-    publication_year = db.Column(db.String(length=30),nullable=False)
-    
-    quantity = db.Column(db.Integer(),nullable=False)
-    min_threshold = db.Column(db.Integer(),nullable=False)
-    buying_price = db.Column(db.Float(),nullable=False)
-    selling_price = db.Column(db.Float(),nullable=False)
-    
-    
 @app.route('/')
 @app.route('/home')
 def home_page():
