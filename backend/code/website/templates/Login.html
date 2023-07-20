@@ -92,13 +92,17 @@
 </head>
 <body>
     <ul class="horizontal-menu">
-        <li><a href="Home.html">Home</a></li>
-        <li><a href="Cart.html">Cart</a></li>
-        <li><a href="Checkout.html">Checkout</a></li>
-        <li><a href="Register.html">Register</a></li>
-        <li><a href="Login.html">Login</a></li>
-        <li><a href="EditProfile.html">Edit Profile</a></li>
-        <li><a href="OrderHistory.html">Order History</a></li>
+        <li><a href="{{ url_for('views.home') }}">Home</a></li>
+        <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+        {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+          <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+          <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+          <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
     </ul>
 
 

@@ -191,11 +191,15 @@
   <ul class="horizontal-menu">
     <li><a href="{{ url_for('views.home') }}">Home</a></li>
     <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
-    <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
-    <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
-    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
-    <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
-    <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+    {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+      <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+      <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+      <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+    {% endif %}
     <li class="search-form">
       <form id="search-form" action="/search" method="GET">
         <input type="text" id="search-input" name="query" placeholder="Search..." required>

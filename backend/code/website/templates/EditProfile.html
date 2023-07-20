@@ -94,94 +94,76 @@
 </head>
 <body>
     <ul class="horizontal-menu">
-        <li><a href="Home.html">Home</a></li>
-        <li><a href="Cart.html">Cart</a></li>
-        <li><a href="Checkout.html">Checkout</a></li>
-        <li><a href="Register.html">Register</a></li> <!-- Added "Register" tab -->
-        <li><a href="Login.html">Login</a></li>
-        <li><a href="EditProfile.html">Edit Profile</a></li>
-        <li><a href="OrderHistory.html">Order History</a></li>
+        <li><a href="{{ url_for('views.home') }}">Home</a></li>
+        <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+        {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+          <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+          <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+          <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+          <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+          <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
     </ul>
 
     <h1>Edit Profile</h1>
-    {% block content %}
-    <form action="/" method="POST">
-        <div class="section">
-            <legend>Information</legend>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            <p>
-        {{ form.name.label }}<br>
-        {{ current_user.name}}
-          </p>
-            <label for="username">User Name:</label>
-            <input type="text" id="user_name" name="name" required>
-                <p>
-        {{ form.username.label }}<br>
-        {{ current_user.id }}
-    </p>
-            <label for="email">Email Address:</label>
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required>
-                <p>
-        {{ form.phone.label }}<br>
-        {{ current_user.phone }}
-    </p>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-                <p>
-        {{ form.password.label }}<br>
-        {{ current_user.password }}
-    </p>
-        </div>
+
+    <form method="post" action="{{ url_for('auth.edit_profile') }}">
+        {{ form.csrf_token }}
+        <fieldset>
+            <div class="section">
+                <legend>Information</legend>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" value="{{ form.name.data }}" required>
+    
+                <label for="phone">Phone:</label>
+                <input type="text" id="phone" name="phone" value="{{ form.phone.data }}" required>
+    
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" value="{{ form.password.data }}" required>
+            </div>
+        </fieldset>
+    
+        <fieldset>
+            <div class="section">
+                <legend>Address</legend>
+                <label for="street">Street:</label>
+                <input type="text" id="street" name="street" value="{{ form.street.data }}" >
+    
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" value="{{ form.city.data }}" >
+    
+                <label for="state">State:</label>
+                <input type="text" id="state" name="state" value="{{ form.state.data }}" >
+    
+                <label for="zip">Zip Code:</label>
+                <input type="text" id="zipcode" name="zipcode" value="{{ form.zipcode.data }}">
+            </div>
+        </fieldset>
+    
+        <fieldset>
+            <div class="section">
+                <legend>Credit Card Information</legend>
+                <label for="card-type">Card Type:</label>
+                <input type="text" id="card-type" name="card_type" value="{{ form.card_type.data }}" >
+    
+                <label for="card-number">Credit Card Number:</label>
+                <input type="text" id="card-number" name="card_number" value="{{ form.card_number.data }}" >
+    
+                <label for="expiration-date">Expiration Date:</label>
+                <input type="text" id="expiration-date" name="expiration_date" value="{{ form.expiration_date.data }}" >
+    
+                <label for="security-code">Security Code:</label>
+                <input type="password" id="security-code" name="security_code" class="security-code" value="{{ form.security_code.data }}" >
+            </div>
+        </fieldset>
+         
+            <div class="submit-button">
+                <input type="submit" value="Save Changes">
+            </div>
     </form>
-{% endblock %}
-    {% block content %}
-    <form action="/" method="POST">
-        <div class="section">
-            <legend>Address</legend>
-            <label for="street">Street:</label>
-            <input type="text" id="street" name="street" required>
 
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city" required>
 
-            <label for="state">State:</label>
-            <input type="text" id="state" name="state" required>
-
-            <label for="zip">Zip Code:</label>
-            <input type="text" id="zip" name="zip" required>
-        </div>
-    </form>
-    {% endblock %}
-    {% block content %}
-    <form action="/" method="POST">
-        <div class="section">
-            <legend>Credit Card Information</legend>
-            <label for="card_type">Card Type:</label>
-            <input type="text" id="card_type" name="card_type" required>
-                <p>
-        {{ form.card_type.label }}<br>
-        {{ current_user.card_type }}
-    </p>
-            <label for="card_number">Credit Card Number:</label>
-            <input type="text" id="card_number" name="card_number" required>
-    <p>
-        {{ form.card_number.label }}<br>
-        {{ current_user.card_number }}
-    </p>
-            <label for="security_code">Security Code:</label>
-            <input type="text" id="security-code" name="security-code" class="security-code" required>
-                <p>
-        {{ form.security_code.label }}<br>
-        {{ current_user.security_code }}
-    </p>
-        </div>
-
-        <div class="submit-button">
-            <input type="submit" value="Save Changes">
-        </div>
-    </form>
-    {% endblock %}
 </body>
 </html>

@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
-from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm
+from flask import Blueprint, render_template, redirect, url_for, flash, request
+from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
 from .models import User
 from . import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash 
@@ -56,11 +56,18 @@ def signup():
             password= generate_password_hash(form.password.data, 'sha256')
         )
 
+        email = form.email.data
+        new_user.generate_verification_token()
+
+        token = new_user.verification_token
+
         # Save the new user to the database
         db.session.add(new_user)
         db.session.commit()
 
-        print("test2")
+        msg = Message('Account Verification', sender='your_gmail_username', recipients=[email])
+        msg.body = f'Click the following link to verify your account: {url_for("auth.verify_account", token=token, _external=True)}'
+        mail.send(msg)
 
         flash('Registration successful! You may proceed to the email verification page.', 'success')
         return redirect(url_for('auth.email_verification'))
@@ -69,19 +76,39 @@ def signup():
     print(form.errors)
     return render_template('Registration.html', form = form)
 
+
+
+@auth.route('/verify-account/<token>')
+def verify_account(token):
+    user = User.query.filter_by(verification_token=token).first()
+
+    if not user or user.verification_token_expiration < datetime.datetime.utcnow():
+        flash('Invalid or expired verification token.', 'error')
+        return redirect(url_for('auth.login'))
+
+    user.is_verified = True
+    user.verification_token = None
+    user.verification_token_expiration = None
+
+    db.session.commit()
+
+    flash('Your account has been verified successfully. You can now log in.', 'success')
+    return redirect(url_for('auth.login'))  # Redirect to the login page
+
+
 @auth.route('/email-verification')
 def email_verification():
     return render_template('RegistrationEmailVerification.html')
 
 
 @auth.route('/logout')
+@login_required
 def logout():
+    logout_user()
+
+    # Redirect the user to the desired page (e.g., home page or login page)
     return redirect(url_for('views.home'))
 
-
-@auth.route('/edit-profile')
-def edit_profile():
-    return render_template('EditProfile.html')
 
 @auth.route('/forgot-password', methods=['GET', 'POST'])
 def forgot_password_email():
@@ -116,10 +143,11 @@ def forgot_password_email():
             
             return render_template('ResetPasswordCorrectEmail.html')
         else: 
-            return render_template('RegistrationIncorrectInformation.html')
+            return render_template('ResetPasswordIncorrectEmail.html')
 
     
     return render_template('ResetPasswordEmail.html', form=form)
+
 
 @auth.route('/reset-password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -136,6 +164,7 @@ def reset_password(token):
     #     return redirect(url_for('auth.forgot_password_email'))
 
     form = ResetPasswordForm()
+    print('1')
 
     if form.validate_on_submit():
         print('work')
@@ -154,7 +183,55 @@ def reset_password(token):
         # Save the changes to the database
         db.session.commit()
 
+        print(form.errors)
+
         flash('Your password has been reset successfully. You can now log in with your new password.', 'success')
         return redirect(url_for('auth.login'))
+    print(form.errors)
+    return render_template('ResetPassword.html', form=form, token = token)
 
-    return render_template('ResetPassword.html', form=form)
+
+@auth.route('/edit-profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+
+    # Load the current user's information into the form fields
+    if request.method == 'GET':
+        form.name.data = current_user.name
+        form.phone.data = current_user.phone
+        form.street.data = current_user.street
+        form.city.data = current_user.city
+        form.state.data = current_user.state
+        form.zipcode.data = current_user.zipcode
+        form.card_type.data = current_user.card_type
+        form.card_number.data = current_user.card_number
+        form.expiration_date.data = current_user.expiration_date
+        form.security_code.data = current_user.security_code
+
+        form.password.date = current_user.password
+
+    if form.validate_on_submit():
+        # Save the changes to the user's profile
+        user = User.query.get(current_user.id)
+        user.name = form.name.data
+        user.phone = form.phone.data
+        user.street = form.street.data
+        user.city = form.city.data
+        user.state = form.state.data
+        user.zipcode = form.zipcode.data
+        user.card_type = form.card_type.data
+        user.card_number = generate_password_hash(form.card_number.data, 'sha256')
+        user.expiration_date = form.expiration_date.data
+        user.security_code = form.security_code.data
+
+        # Update the password if it's different from the pre-populated one
+        if user.password != form.password.data:
+            user.password = generate_password_hash(form.password.data, 'sha256')
+
+        db.session.commit()
+
+        flash('Your profile has been updated successfully.', 'success')
+        return redirect(url_for('auth.edit_profile'))
+
+    return render_template('EditProfile.html', form=form)

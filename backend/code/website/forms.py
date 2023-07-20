@@ -4,7 +4,6 @@ from wtforms.validators import DataRequired, Email, Length, NumberRange, EqualTo
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=150)])
-    username = StringField('Username', validators=[DataRequired()])
     phone = IntegerField('Phone', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email(), Length(max=150)])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -22,22 +21,23 @@ class ResetPasswordEmailForm(FlaskForm):
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('New Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('password')])
+    confirm_password = PasswordField('Confirm New Password', validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])
     submit = SubmitField('Reset Password')
 
-class EditAccountForm(FlaskForm):
-     name = StringField('Name', validators=[DataRequired(), Length(max=150)])
-    username = StringField('Username', validators=[DataRequired()])
-    email = HiddenField('Email', validators=[Email()])
-    phone = IntegerField('Phone', validators=[DataRequired()])
+class EditProfileForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    phone = StringField('Phone', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+
     street = StringField('Street')
     city = StringField('City')
     state = StringField('State')
-    zipcode=IntegerField('Zipcode')
+    zipcode = IntegerField('Zip Code')  # Make sure to match the field name with your User model
+
     card_type = StringField('Card Type')
-    card_number=IntegerField('Card Number')
-    security_code=HiddenField('Security Code')
-    submit = SubmitField('Sign In')
+    card_number = IntegerField('Credit Card Number')
+    expiration_date = StringField('Expiration Date') 
+    security_code = PasswordField('Security Code')
+
+    submit = SubmitField('Save Changes')
     

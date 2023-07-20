@@ -17,11 +17,11 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     
     #email
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 465
+    app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+    app.config['MAIL_PORT'] = 587
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'temp.bookstore4050@gmail.com'  # Replace with your Gmail username
-    app.config['MAIL_PASSWORD'] = 'tempEmail@01'  # Replace with your Gmail password
+    app.config['MAIL_USERNAME'] = 'eric.vicente00@gmail.com '  # Replace with your Gmail username
+    app.config['MAIL_PASSWORD'] = 'pwjzedpsuaaxflbe'  # Replace with your Gmail password
     mail.init_app(app)
     db.init_app(app)
 
