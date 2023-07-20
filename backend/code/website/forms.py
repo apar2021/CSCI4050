@@ -26,8 +26,18 @@ class ResetPasswordForm(FlaskForm):
     submit = SubmitField('Reset Password')
 
 class EditAccountForm(FlaskForm):
+     name = StringField('Name', validators=[DataRequired(), Length(max=150)])
     username = StringField('Username', validators=[DataRequired()])
     email = HiddenField('Email', validators=[Email()])
-    
+    phone = IntegerField('Phone', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    street = StringField('Street')
+    city = StringField('City')
+    state = StringField('State')
+    zipcode=IntegerField('Zipcode')
+    card_type = StringField('Card Type')
+    card_number=IntegerField('Card Number')
+    security_code=HiddenField('Security Code')
     submit = SubmitField('Sign In')
     
