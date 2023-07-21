@@ -7,11 +7,12 @@ from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 from flask_mail import Message
 import datetime
+from cryptography.fernet import Fernet
+
 
 auth = Blueprint('auth', __name__)
 
 
-@login_required
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -20,16 +21,16 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user and check_password_hash(user.password, form.password.data):
-            # Login successful, use Flask-Login to log the user in
-            login_user(user)
+            if user.is_verified:
+                login_user(user)
 
-            flash('Login successful!', 'success')
-            print('2')
-            return redirect(url_for('views.home'))
+                flash('Login successful!', 'success')
+                return redirect(url_for('views.home'))
+            else:
+                flash('Account Not Verified. Please Verify Account.', 'error')
         else:
             flash('Invalid email or password. Please try again.', 'error')
-            print('3')
-    print('bruh1')
+
     return render_template('Login.html', form = form)
 
 
@@ -72,10 +73,7 @@ def signup():
         flash('Registration successful! You may proceed to the email verification page.', 'success')
         return redirect(url_for('auth.email_verification'))
 
-    print("test1")
-    print(form.errors)
     return render_template('Registration.html', form = form)
-
 
 
 @auth.route('/verify-account/<token>')
@@ -117,18 +115,11 @@ def forgot_password_email():
     if form.validate_on_submit():
         # Process the form data here
         email = form.email.data
-        # You can send an email to the user's email address with a reset link
-        # For example:
-        # send_reset_password_email(email) 
 
         user = User.query.filter_by(email=email).first()
         
         if user:
             token = secrets.token_urlsafe(16)  # Generate a token with 16 bytes (128 bits)
-
-            # Save the token in the database associated with the user's email
-            # This step is omitted in this example, and you should implement it in your code.
-            # For example, you can have a column in the user's table to store the reset token.
 
             user.reset_token = token
             user.reset_token_expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # Set expiration to one hour from now
@@ -158,16 +149,9 @@ def reset_password(token):
         flash('Invalid token. Please request a new password reset.', 'error')
         return redirect(url_for('auth.forgot_password_email'))
 
-    # You can also check if the token has expired and handle it accordingly
-    # For example, if user.reset_token_expiration < datetime.utcnow():
-    #     flash('Token has expired. Please request a new password reset.', 'error')
-    #     return redirect(url_for('auth.forgot_password_email'))
-
     form = ResetPasswordForm()
-    print('1')
 
     if form.validate_on_submit():
-        print('work')
        
         if form.password.data != form.confirm_password.data:
             flash('Passwords do not match. Please try again.', 'error')
@@ -195,43 +179,48 @@ def reset_password(token):
 @login_required
 def edit_profile():
     form = EditProfileForm()
-    id = current_user.id
+
     # Load the current user's information into the form fields
-    name_to_update=Users.query.get_or_404(id)
-    if request.method == 'POST':
+    if request.method == 'GET':
         form.name.data = current_user.name
         form.phone.data = current_user.phone
+
         form.street.data = current_user.street
         form.city.data = current_user.city
         form.state.data = current_user.state
         form.zipcode.data = current_user.zipcode
+
         form.card_type.data = current_user.card_type
-        form.card_number.data = current_user.card_number
+        form.card_number.data = current_user.decrypt_card_number()
         form.expiration_date.data = current_user.expiration_date
-        form.security_code.data = current_user.security_code
-        form.password.date = current_user.password
+        form.security_code.data = current_user.decrypt_security_code()
 
     if form.validate_on_submit():
         # Save the changes to the user's profile
         user = User.query.get(current_user.id)
         user.name = form.name.data
         user.phone = form.phone.data
+
         user.street = form.street.data
         user.city = form.city.data
         user.state = form.state.data
         user.zipcode = form.zipcode.data
+
         user.card_type = form.card_type.data
-        user.card_number = generate_password_hash(form.card_number.data, 'sha256')
+        if form.card_number.data:
+            user.card_number_encrypted = user.encrypt(str(form.card_number.data))
+
         user.expiration_date = form.expiration_date.data
-        user.security_code = form.security_code.data
+        if form.security_code.data:
+            user.security_code_encrypted = user.encrypt(str(form.security_code.data))
 
-        # Update the password if it's different from the pre-populated one
-        if user.password != form.password.data:
+        if form.password.data:
             user.password = generate_password_hash(form.password.data, 'sha256')
-
+        
         db.session.commit()
 
         flash('Your profile has been updated successfully.', 'success')
         return redirect(url_for('auth.edit_profile'))
 
+    print(form.errors)
     return render_template('EditProfile.html', form=form)

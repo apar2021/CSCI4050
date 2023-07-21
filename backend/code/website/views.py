@@ -17,4 +17,8 @@ def cart():
 def order_history():
     return render_template('OrderHistory.html')
 
+@views.route('/admin-page')
+def admin_page():
+    return render_template('AdminPage.html')
+
 
