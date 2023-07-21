@@ -195,9 +195,10 @@ def reset_password(token):
 @login_required
 def edit_profile():
     form = EditProfileForm()
-
+    id = current_user.id
     # Load the current user's information into the form fields
-    if request.method == 'GET':
+    name_to_update=Users.query.get_or_404(id)
+    if request.method == 'POST':
         form.name.data = current_user.name
         form.phone.data = current_user.phone
         form.street.data = current_user.street
@@ -208,7 +209,6 @@ def edit_profile():
         form.card_number.data = current_user.card_number
         form.expiration_date.data = current_user.expiration_date
         form.security_code.data = current_user.security_code
-
         form.password.date = current_user.password
 
     if form.validate_on_submit():
