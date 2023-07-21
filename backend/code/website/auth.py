@@ -219,6 +219,11 @@ def edit_profile():
         
         db.session.commit()
 
+        msg = Message('Profile Updated', sender='your_gmail_username', recipients=[current_user.email])
+        msg.body = 'Your profile has been updated successfully.'
+        mail.send(msg)
+
+
         flash('Your profile has been updated successfully.', 'success')
         return redirect(url_for('auth.edit_profile'))
 
