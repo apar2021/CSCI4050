@@ -1,0 +1,10 @@
+flask=3.10
+flask-brcypt=3.12
+flask-login
+flask-mail
+flask-sqlachemy
+flask-wtf
+email-validator
+selenium
+cryptography.fernet
+secrets
