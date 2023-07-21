@@ -2,6 +2,7 @@ from . import db
 from flask_login import UserMixin
 from datetime import datetime, timedelta
 import secrets
+from cryptography.fernet import Fernet
 
 class User(db.Model, UserMixin):
     __tablename__="users"
@@ -14,7 +15,6 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.Integer)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
-    admin = db.Column(db.Boolean,default=False)
     
     # user address
     street = db.Column(db.String(150))
@@ -25,9 +25,9 @@ class User(db.Model, UserMixin):
     
     #payment info
     card_type = db.Column(db.String(150))
-    card_number = db.Column(db.String(150))
+    card_number_encrypted  = db.Column(db.String(150))
     expiration_date = db.Column(db.String(150))
-    security_code = db.Column(db.String(10))
+    security_code_encrypted  = db.Column(db.String(10))
 
     #verification
     is_verified = db.Column(db.Boolean, default=False)
@@ -42,11 +42,17 @@ class User(db.Model, UserMixin):
     reset_token = db.Column(db.String(100), unique=True)  # Store the reset token
     reset_token_expiration = db.Column(db.DateTime) 
 
+    #admin
+    is_admin = db.Column(db.Boolean, default=False)
+
+    # encryptor attribute
+    encryption_key = Fernet.generate_key()
+    encryptor = Fernet(encryption_key)
 
     def __init__(self, name, phone, email, password, 
                  street="", city="", state="", country="", zipcode=None, 
                  card_type="", card_number=None, expiration_date="", security_code=None,
-                 reset_token = None, reset_token_expiration = None):
+                 reset_token=None, reset_token_expiration=None, is_admin=False):
         self.name = name
         self.phone = phone
         self.email = email
@@ -57,10 +63,32 @@ class User(db.Model, UserMixin):
         self.country = country
         self.zipcode = zipcode
         self.card_type = card_type
-        self.card_number = card_number
         self.expiration_date = expiration_date
         self.reset_token = reset_token
         self.reset_token_expiration = reset_token_expiration
-        self.security_code = security_code
-        
+        self.is_admin = is_admin
 
+        if card_number:
+            self.card_number_encrypted = self.encrypt(str(card_number))
+        else:
+            self.card_number_encrypted = None
+
+        if security_code:
+            self.security_code_encrypted = self.encrypt(str(security_code))
+        else:
+            self.security_code_encrypted = None
+
+    def encrypt(self, data):
+        if data:
+            return User.encryptor.encrypt(data.encode()).decode()
+        return None
+
+    def decrypt_card_number(self):
+        if self.card_number_encrypted:
+            return User.encryptor.decrypt(self.card_number_encrypted.encode()).decode()
+        return None
+
+    def decrypt_security_code(self):
+        if self.security_code_encrypted:
+            return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
+        return None
