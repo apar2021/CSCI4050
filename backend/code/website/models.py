@@ -92,3 +92,28 @@ class User(db.Model, UserMixin):
         if self.security_code_encrypted:
             return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
         return None
+
+
+class Book(db.Model, UserMixin):
+    __tablename__="books"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+
+    # book attributes
+    isbn = db.Column(db.Integer)
+    title = db.Column(db.String(150))
+    author = db.Column(db.String(150))
+    edition = db.Column(db.String(50))
+    category = db.Column(db.String(100))
+    publisher = db.Column(db.String(150))
+    publication_year = db.Column(db.Integer)
+
+    def __init__(self, isbn, title, author, edition, category, publisher, publication_year):
+        self.isbn = isbn
+        self.title = title
+        self.author = author
+        self.edition = edition
+        self.category = category
+        self.publisher = publisher
+        self.publication_year = publication_year
