@@ -23,13 +23,13 @@ class User(db.Model, UserMixin):
     country = db.Column(db.String(150))
     zipcode = db.Column(db.Integer)
     
-    #payment info
+    # payment info
     card_type = db.Column(db.String(150))
     card_number_encrypted  = db.Column(db.String(150))
     expiration_date = db.Column(db.String(150))
     security_code_encrypted  = db.Column(db.String(10))
 
-    #verification
+    # verification
     is_verified = db.Column(db.Boolean, default=False)
     verification_token = db.Column(db.String(100), unique=True)
     verification_token_expiration = db.Column(db.DateTime)
@@ -38,11 +38,11 @@ class User(db.Model, UserMixin):
         self.verification_token = secrets.token_urlsafe(32)
         self.verification_token_expiration = datetime.utcnow() + timedelta(hours=24)
 
-    #reset password info
+    # reset password info
     reset_token = db.Column(db.String(100), unique=True)  # Store the reset token
     reset_token_expiration = db.Column(db.DateTime) 
 
-    #admin
+    # admin
     is_admin = db.Column(db.Boolean, default=False)
 
     # encryptor attribute

@@ -30,6 +30,8 @@ def login():
                 flash('Account Not Verified. Please Verify Account.', 'error')
         else:
             flash('Invalid email or password. Please try again.', 'error')
+    else:
+        flash('Missing Input Information', 'error')
 
     return render_template('Login.html', form = form)
 
