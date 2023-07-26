@@ -4,6 +4,10 @@ from datetime import datetime, timedelta
 import secrets
 from cryptography.fernet import Fernet
 
+# Table containing user information
+# Todo: Move payments into a separate table
+# Todo: Move optional address info into separate table
+# Waiting for eric for ^^^^ so I dont break stuff
 class User(db.Model, UserMixin):
     __tablename__="users"
 
@@ -93,7 +97,7 @@ class User(db.Model, UserMixin):
             return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
         return None
 
-
+# Table containing Book Information
 class Book(db.Model, UserMixin):
     __tablename__="books"
 
@@ -118,7 +122,8 @@ class Book(db.Model, UserMixin):
         self.publisher = publisher
         self.publication_year = publication_year
 
-class inventory(db.Model, UserMixin):
+# Table containing Inventory Information
+class Inventory(db.Model, UserMixin):
     __tablename__="inventory"
 
     # primary key
@@ -138,7 +143,8 @@ class inventory(db.Model, UserMixin):
         self.buying_price = buying_price
         self.min_threshold = min_threshold
 
-class promotion(db.Model, UserMixin):
+# Table containing Promotion Information
+class Promotion(db.Model, UserMixin):
     __tablename__="promotion"
 
     # primary key
@@ -152,9 +158,9 @@ class promotion(db.Model, UserMixin):
         self.promotion_start_date = promotion_start_date
         self.promotion_end_date = promotion_end_date
 
-
-
-class cart(db.Model, UserMixin):
+# Table containing associations between users and carts
+# Create a new cart entry for the user after every checkout
+class Cart(db.Model, UserMixin):
     __tablename__="cart"
 
     # primary key
@@ -164,7 +170,8 @@ class cart(db.Model, UserMixin):
     def __init__(self, userid):
         self.userid = userid
 
-class cart_items(db.Model, UserMixin):
+# Table containing associations between carts and book items
+class CartItems(db.Model, UserMixin):
     __tablename__="cart_items"
 
     # primary key
@@ -178,8 +185,8 @@ class cart_items(db.Model, UserMixin):
         self.bookid = bookid
         self.quantity = quantity
 
-
-class transaction(db.Model, UserMixin):
+# Table containing associations between carts and transactions
+class Transaction(db.Model, UserMixin):
     __tablename__="transaction"
 
     # primary key
@@ -192,8 +199,9 @@ class transaction(db.Model, UserMixin):
     def __init__(self, cartid, quantity):
         self.cartid = cartid
         self.quantity = quantity
-    
-class order(db.Model, UserMixin):
+
+# Table containing information about past orders
+class Order(db.Model, UserMixin):
     __tablename__="order"
 
     # primary key
