@@ -16,10 +16,13 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    print(form.email.data)
+
     if form.validate_on_submit():
         # Check if the user exists in the database
+        print(1)
         user = User.query.filter_by(email=form.email.data).first()
-
+        print(2)
         if user and check_password_hash(user.password, form.password.data):
             if user.is_verified:
                 login_user(user)
@@ -28,10 +31,14 @@ def login():
                 return redirect(url_for('views.home'))
             else:
                 flash('Account Not Verified. Please Verify Account.', 'error')
+                #return redirect(url_for('auth.login'))
         else:
             flash('Invalid email or password. Please try again.', 'error')
+            #return redirect(url_for('auth.login'))
     else:
         flash('Missing Input Information', 'error')
+        print("START ERRORS: ", form.errors)
+        #return redirect(url_for('auth.login'))
 
     return render_template('Login.html', form = form)
 

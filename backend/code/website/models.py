@@ -208,7 +208,9 @@ class Order(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('users.id'))
     transactionid = db.Column(db.Integer, db.ForeignKey('transaction.id'))
-    cardid = db.Column(db.Integer, db.ForeignKey('card.id'))
+    # Todo: Change to cardid
+    card_number = db.Column(db.Integer, db.ForeignKey('users.card_number_encrypted'))
+    #cardid = db.Column(db.Integer, db.ForeignKey('card.id'))
     # The total price is the price of the transaction times its quanitity
     total_price = db.Column(db.Float)
     promotionid = db.Column(db.Integer, db.ForeignKey('promotion.id'))
