@@ -1,17 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, SubmitField, EmailField
+from wtforms import StringField, IntegerField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, NumberRange, EqualTo, Optional
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=150)])
     phone = IntegerField('Phone', validators=[DataRequired()])
-    email = EmailField('Email', validators=[DataRequired(), Email(), Length(max=150)])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=5, message="Password must be at least 5 characters long.")])
+    email = StringField('Email', validators=[DataRequired(), Email(), Length(max=150)])
+    password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email("This input requires a valid email address.")])
+    email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
@@ -36,7 +36,7 @@ class EditProfileForm(FlaskForm):
 
     card_type = StringField('Card Type')
     card_number = IntegerField('Credit Card Number')
-    expiration_date = StringField('Expiration Date')
+    expiration_date = StringField('Expiration Date') 
     security_code = PasswordField('Security Code')
 
     submit = SubmitField('Save Changes')
