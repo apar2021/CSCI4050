@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Registration</title>
+    <title>AddBooks</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,8 +54,17 @@
         
         input[type="email"],
         input[type="password"],
-        input[type="text"],
-        input[type="tel"] {
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #8A584C;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        
+        input[type="number"] {
             width: 100%;
             padding: 10px;
             margin: 8px 0;
@@ -78,6 +87,16 @@
         
         input[type="submit"]:hover {
             background-color: #70463e;
+        }
+        
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .forgot-password a {
+            color: #8A584C;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -107,66 +126,54 @@
         {% if messages %}
             <div class="flash-messages">
                 <ul>
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         {% endif %}
     {% endwith %}
         
 
-    <form action="/signup" method="post">
-        <fieldset>
-            <legend>Required Information</legend>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-
-            <label for="phone">Phone:</label>
-            <input type="tel" id="phone" name="phone" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
-            <label for="confirm_password">Confirm Password:</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </fieldset>
-        
-        <fieldset>
-            <legend>Address</legend>
-            <label for="street">Street:</label>
-            <input type="text" id="street" name="street">
-
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city">
-
-            <label for="state">State:</label>
-            <input type="text" id="state" name="state">
-
-            <label for="zipcode">Zip Code:</label>
-            <input type="text" id="zipcode" name="zipcode">
-        </fieldset>
-        
-        <fieldset>
-            <legend>Credit Card Information</legend>
-            <label for="card_type">Card Type:</label>
-            <input type="text" id="card_type" name="card_type">
-
-            <label for="card_number">Credit Card Number:</label>
-            <input type="text" id="card_number" name="card_number">
-
-            <label for="expiration_date">Expiration Date:</label>
-            <input type="text" id="expiration_date" name="expiration_date">
-
-            <label for="security_code">Security Code:</label>
-            <input type="text" id="security_code" name="security_code">
-        </fieldset>
-
-        {{ form.csrf_token }}
-        <input type="submit" value="Register" onclick="location.href='RegistrationEmailVerification.html'">
+    <h1>Add Books</h1>
+        <form>
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required><br>
+    
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required><br>
+    
+        <label for="authors">Authors' Names:</label>
+        <input type="text" id="authors" name="authors" required><br>
+    
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+    
+        <label for="image-url">Image URL:</label>
+        <input type="text" id="image-url" name="image-url" required><br>
+    
+        <label for="edition">Edition:</label>
+        <input type="text" id="edition" name="edition" required><br>
+    
+        <label for="publisher">Publisher:</label>
+        <input type="text" id="publisher" name="publisher" required><br>
+    
+        <label for="publication-year">Publication Year:</label>
+        <input type="text" id="publication-year" name="publication-year" required><br>
+    
+        <label for="quantity-in-stock">Quantity in Stock:</label>
+        <input type="number" id="quantity-in-stock" name="quantity-in-stock" required><br>
+    
+        <label for="minimum-threshold">Minimum Threshold:</label>
+        <input type="number" id="minimum-threshold" name="minimum-threshold" required><br>
+    
+        <label for="buying-price">Buying Price:</label>
+        <input type="number" id="buying-price" name="buying-price" step="0.01" required><br>
+    
+        <label for="selling-price">Selling Price:</label>
+        <input type="number" id="selling-price" name="selling-price" step="0.01" required><br>
+    
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
