@@ -227,4 +227,4 @@ class Order(db.Model, UserMixin):
 # Todo: Add Card Table and move encryption from user into it
 
 
-    
+

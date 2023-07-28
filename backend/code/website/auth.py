@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
-from .models import User
+from .models import User, Cart, Book, Order
 from . import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash 
 from flask_login import login_user, current_user, logout_user, login_required
@@ -8,6 +8,7 @@ import secrets
 from flask_mail import Message
 import datetime
 from cryptography.fernet import Fernet
+from flask_session import Session
 
 
 auth = Blueprint('auth', __name__)
@@ -236,36 +237,114 @@ def edit_profile():
 
     print(form.errors)
     return render_template('EditProfile.html', form=form)
-    
-    @auth.route('/add_to_cart', methods=['POST'])
-    @login_required
+
+
+@auth.route('/add_to_cart', methods=['POST'])
+@login_required
 def add_to_cart():
-    product_id = request.form['product_id']
+    product_id = int(request.form['product_id'])
     quantity = int(request.form['quantity'])
 
-    if 'cart' not in session:
-        session['cart'] = {}
+    product = Book.query.get(product_id)
+    if not product:
+        flash('Product not found.', 'error')
+        return redirect(url_for('index'))
 
-    if product_id in session['cart']:
-        session['cart'][product_id] += quantity
+    if product.quantity < quantity:
+        flash('Not enough stock available.', 'error')
     else:
-        session['cart'][product_id] = quantity
+        cart_item = Cart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
+        if cart_item:
+            cart_item.quantity += quantity
+        else:
+            cart_item = Cart(user_id=current_user.id, product_id=product_id, quantity=quantity)
+            db.session.add(cart_item)
+
+        db.session.commit()
+        flash('Item added to cart.', 'success')
 
     return redirect(url_for('home'))
 
 @auth.route('/remove_from_cart', methods=['POST'])
+@login_required
 def remove_from_cart():
-    product_id = request.form['product_id']
+    cart_id = int(request.form['cart_id'])
     quantity = int(request.form['quantity'])
 
-    if 'cart' in session and product_id in session['cart']:
-        session['cart'][product_id] -= quantity
-        if session['cart'][product_id] <= 0:
-            del session['cart'][product_id]
+    cart_item = Cart.query.get(cart_id)
+    if not cart_item:
+        flash('Item not found in cart.', 'error')
+    else:
+        if cart_item.quantity <= quantity:
+            db.session.delete(cart_item)
+        else:
+            cart_item.quantity -= quantity
+
+        db.session.commit()
+        flash('Item removed from cart.', 'success')
 
     return redirect(url_for('cart'))
 
 @auth.route('/cart')
+@login_required
 def cart():
-    return render_template('cart.html', cart=session.get('cart', {}))
+    cart_items = Cart.query.filter_by(user_id=current_user.id).all()
+    total_cost = 0
+
+    for cart_item in cart_items:
+        product = Book.query.get(cart_item.product_id)
+        if not product:
+            continue
+
+        total_cost += product.price * cart_item.quantity
+
+    return render_template('cart.html', cart_items=cart_items, total_cost=total_cost)
+
+@auth.route('/checkout', methods=['POST'])
+@login_required
+def checkout():
+    cart_items = Cart.query.filter_by(user_id=current_user.id).all()
+
+    if not cart_items:
+        flash('Your cart is empty.', 'error')
+        return redirect(url_for('home'))
+
+    total_cost = 0
+    for cart_item in cart_items:
+        product = Book.query.get(cart_item.product_id)
+        if not product:
+            continue
+
+        total_cost += product.price * cart_item.quantity
+
+        # Check if the product quantity is sufficient for the order
+        if product.quantity < cart_item.quantity:
+            flash(f'Not enough stock available for {product.name}.', 'error')
+            return redirect(url_for('cart'))
+
+    # Create a new order
+    order = Order(user_id=current_user.id, total_cost=total_cost)
+    db.session.add(order)
+
+    # Move cart items to order items and update the product quantity
+    for cart_item in cart_items:
+        product = Book.query.get(cart_item.product_id)
+        if not product:
+            continue
+
+        order_item = Order(order_id=order.id, product_id=product.id, quantity=cart_item.quantity, price=product.price)
+        db.session.add(order_item)
+
+        product.quantity -= cart_item.quantity
+        db.session.delete(cart_item)
+
+    db.session.commit()
+    flash('Order placed successfully!', 'success')
+    return redirect(url_for('orders'))
+
+@auth.route('/orders')
+@login_required
+def orders():
+    orders = Order.query.filter_by(user_id=current_user.id).all()
+    return render_template('orders.html', orders=orders)
 
