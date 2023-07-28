@@ -131,13 +131,13 @@
 
     <form action = '/login', method="post">
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+        <input type="email" id="email" name="email" required placeholder="Enter your email.">
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         
     
-        <input type="submit" value="Login", onclick="location.href='Home.html'">
+        <input type="submit" id="submit" value="Login">
         {{ form.csrf_token }}
 
         <div class="forgot-password">

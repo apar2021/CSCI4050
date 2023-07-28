@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request,session
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
-from .models import User
+from .models import User, Cart, Book, Order
 from . import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash 
 from flask_login import login_user, current_user, logout_user, login_required
@@ -8,6 +8,7 @@ import secrets
 from flask_mail import Message
 import datetime
 from cryptography.fernet import Fernet
+from flask_session import Session
 
 
 auth = Blueprint('auth', __name__)
@@ -16,10 +17,11 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    print(form.email.data)
+
     if form.validate_on_submit():
         # Check if the user exists in the database
         user = User.query.filter_by(email=form.email.data).first()
-
         if user and check_password_hash(user.password, form.password.data):
             if user.is_verified:
                 login_user(user)
@@ -30,6 +32,9 @@ def login():
                 flash('Account Not Verified. Please Verify Account.', 'error')
         else:
             flash('Invalid email or password. Please try again.', 'error')
+    else:
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Login.html', form = form)
 
@@ -69,9 +74,12 @@ def signup():
         msg = Message('Account Verification', sender='your_gmail_username', recipients=[email])
         msg.body = f'Click the following link to verify your account: {url_for("auth.verify_account", token=token, _external=True)}'
         mail.send(msg)
-
+        
         flash('Registration successful! You may proceed to the email verification page.', 'success')
         return redirect(url_for('auth.email_verification'))
+    else:
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Registration.html', form = form)
 
@@ -300,7 +308,7 @@ def checkout():
 
     total_cost = 0
     for cart_item in cart_items:
-        product = Product.query.get(cart_item.product_id)
+        product = Book.query.get(cart_item.product_id)
         if not product:
             continue
 
@@ -317,11 +325,12 @@ def checkout():
 
     # Move cart items to order items and update the product quantity
     for cart_item in cart_items:
-        product = Product.query.get(cart_item.product_id)
+
+        product = Book.query.get(cart_item.product_id)
         if not product:
             continue
 
-        order_item = OrderItem(order_id=order.id, product_id=product.id, quantity=cart_item.quantity, price=product.price)
+        order_item = Order(order_id=order.id, product_id=product.id, quantity=cart_item.quantity, price=product.price)
         db.session.add(order_item)
 
         product.quantity -= cart_item.quantity
@@ -336,6 +345,4 @@ def checkout():
 def orders():
     orders = Order.query.filter_by(user_id=current_user.id).all()
     return render_template('orders.html', orders=orders)
-
-
 
