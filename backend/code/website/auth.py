@@ -236,3 +236,36 @@ def edit_profile():
 
     print(form.errors)
     return render_template('EditProfile.html', form=form)
+    
+    @auth.route('/add_to_cart', methods=['POST'])
+    @login_required
+def add_to_cart():
+    product_id = request.form['product_id']
+    quantity = int(request.form['quantity'])
+
+    if 'cart' not in session:
+        session['cart'] = {}
+
+    if product_id in session['cart']:
+        session['cart'][product_id] += quantity
+    else:
+        session['cart'][product_id] = quantity
+
+    return redirect(url_for('home'))
+
+@auth.route('/remove_from_cart', methods=['POST'])
+def remove_from_cart():
+    product_id = request.form['product_id']
+    quantity = int(request.form['quantity'])
+
+    if 'cart' in session and product_id in session['cart']:
+        session['cart'][product_id] -= quantity
+        if session['cart'][product_id] <= 0:
+            del session['cart'][product_id]
+
+    return redirect(url_for('cart'))
+
+@auth.route('/cart')
+def cart():
+    return render_template('cart.html', cart=session.get('cart', {}))
+
