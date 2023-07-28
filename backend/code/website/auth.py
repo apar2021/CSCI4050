@@ -30,6 +30,9 @@ def login():
                 flash('Account Not Verified. Please Verify Account.', 'error')
         else:
             flash('Invalid email or password. Please try again.', 'error')
+    else:
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Login.html', form = form)
 
@@ -72,6 +75,9 @@ def signup():
 
         flash('Registration successful! You may proceed to the email verification page.', 'success')
         return redirect(url_for('auth.email_verification'))
+    else:
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Registration.html', form = form)
 
