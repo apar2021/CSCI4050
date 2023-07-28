@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, url_for
+from flask import Blueprint, flash, redirect, url_for, render_template
 from .models import Book
 from .forms import AddBookForm
 from . import db
@@ -34,4 +34,10 @@ def add_book():
         flash('The book has been added successfully.', 'success')
         return redirect(url_for('admin.add_book'))
 
-    return None
+    return render_template('AddBooks.html')
+
+@admin.register('/add-promo')
+def add_promo():
+
+    
+    return render_template('AddPromotions.html')

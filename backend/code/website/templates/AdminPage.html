@@ -48,7 +48,7 @@
 </head>
 <body>
   <h1>Admin Page</h1>
-  <a href="AddBooks.html" class="button">Add Books</a>
-  <a href="AddPromotions.html" class="button">Add Promotions</a>
+  <a href="{{ url_for('admin.add_book') }}" class="button">Add Books</a>
+  <a href="{{ url_for('admin.add_promo') }}" class="button">Add Promotions</a>
 </body>
 </html>
