@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request,session
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
 from .models import User, Book, Order, Cart, CartItems
 from . import db, mail
@@ -16,11 +16,10 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    print(form.email.data)
-
     if form.validate_on_submit():
         # Check if the user exists in the database
         user = User.query.filter_by(email=form.email.data).first()
+
         if user and check_password_hash(user.password, form.password.data):
             if user.is_verified:
                 login_user(user)
@@ -31,9 +30,6 @@ def login():
                 flash('Account Not Verified. Please Verify Account.', 'error')
         else:
             flash('Invalid email or password. Please try again.', 'error')
-    else:
-        for error, message in zip(form.errors.keys(), form.errors.values()):
-            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Login.html', form = form)
 
@@ -73,12 +69,9 @@ def signup():
         msg = Message('Account Verification', sender='your_gmail_username', recipients=[email])
         msg.body = f'Click the following link to verify your account: {url_for("auth.verify_account", token=token, _external=True)}'
         mail.send(msg)
-        
+
         flash('Registration successful! You may proceed to the email verification page.', 'success')
         return redirect(url_for('auth.email_verification'))
-    else:
-        for error, message in zip(form.errors.keys(), form.errors.values()):
-            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Registration.html', form = form)
 
@@ -236,7 +229,7 @@ def edit_profile():
 
     print(form.errors)
     return render_template('EditProfile.html', form=form)
-    
+
 @auth.route('/add_to_cart', methods=['POST'])
 @login_required
 def add_to_cart():
@@ -297,6 +290,7 @@ def cart():
         total_cost += product.price * cart_item.quantity
 
     return render_template('cart.html', cart_items=cart_items, total_cost=total_cost)
+  
 @auth.route('/checkout', methods=['POST'])
 @login_required
 def checkout():

@@ -4,10 +4,6 @@ from datetime import datetime, timedelta
 import secrets
 from cryptography.fernet import Fernet
 
-# Table containing user information
-# Todo: Move payments into a separate table
-# Todo: Move optional address info into separate table
-# Waiting for eric for ^^^^ so I dont break stuff
 class User(db.Model, UserMixin):
     __tablename__="users"
 
@@ -27,13 +23,13 @@ class User(db.Model, UserMixin):
     country = db.Column(db.String(150))
     zipcode = db.Column(db.Integer)
     
-    # payment info
+    #payment info
     card_type = db.Column(db.String(150))
     card_number_encrypted  = db.Column(db.String(150))
     expiration_date = db.Column(db.String(150))
     security_code_encrypted  = db.Column(db.String(10))
 
-    # verification
+    #verification
     is_verified = db.Column(db.Boolean, default=False)
     verification_token = db.Column(db.String(100), unique=True)
     verification_token_expiration = db.Column(db.DateTime)
@@ -42,11 +38,11 @@ class User(db.Model, UserMixin):
         self.verification_token = secrets.token_urlsafe(32)
         self.verification_token_expiration = datetime.utcnow() + timedelta(hours=24)
 
-    # reset password info
+    #reset password info
     reset_token = db.Column(db.String(100), unique=True)  # Store the reset token
     reset_token_expiration = db.Column(db.DateTime) 
 
-    # admin
+    #admin
     is_admin = db.Column(db.Boolean, default=False)
 
     # encryptor attribute
@@ -95,8 +91,6 @@ class User(db.Model, UserMixin):
     def decrypt_security_code(self):
         if self.security_code_encrypted:
             return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
-        return None
-
 # Table containing Book Information
 class Book(db.Model, UserMixin):
     __tablename__="books"
@@ -224,7 +218,4 @@ class Order(db.Model, UserMixin):
         self.promotionid = promotionid
         self.order_date = order_date
 
-# Todo: Add Card Table and move encryption from user into it
-
-
-    
+        return None
