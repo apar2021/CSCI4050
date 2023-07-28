@@ -63,31 +63,35 @@
   
   <div class="cart">
     
-    <table>
-      <thead>
+   <table>
         <tr>
-          <th>Book Title</th>
-          <th>Author</th>
-          <th>Price</th>
-          <th>Quantity</th>
+            <th>Product</th>
+            <th>Quantity</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>The Great Gatsby</td>
-          <td>F. Scott Fitzgerald</td>
-          <td>$10.99</td>
-          <td>
-            <input class="quantity-input" type="number" value="1" min="1">
-          </td>
-        </tr>
-      </tbody>
+        {% for product_id, quantity in cart.items() %}
+            <tr>
+                <td>{{ product_id }}</td>
+                <td>{{ quantity }}</td>
+                <td>
+                    <form action="/remove_from_cart" method="post">
+                        <input type="hidden" name="product_id" value="{{ product_id }}">
+                        <input type="number" name="quantity" value="1" min="1">
+                        <input type="submit" value="Remove">
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
     </table>
-    
+
+    <!-- Display the cart total -->
+    <p>Total: ${{ calculate_cart_total() }}</p>
+
+    <!-- Add more features or checkout button here -->
+
     <button class="remove-button">Remove from Cart</button>
   </div>
   
   <button class="checkout-button">Proceed to Checkout</button>
-  
+  <p>Total: ${{ calculate_cart_total() }}</p>
 </body>
 </html>
