@@ -95,7 +95,6 @@ class User(db.Model, UserMixin):
     def decrypt_security_code(self):
         if self.security_code_encrypted:
             return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
-        return None
 
 # Table containing Book Information
 class Book(db.Model, UserMixin):
@@ -223,8 +222,3 @@ class Order(db.Model, UserMixin):
         self.total_price = total_price
         self.promotionid = promotionid
         self.order_date = order_date
-
-# Todo: Add Card Table and move encryption from user into it
-
-
-

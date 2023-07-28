@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request,session
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
 from .models import User, Cart, Book, Order
 from . import db, mail
@@ -237,8 +237,6 @@ def edit_profile():
 
     print(form.errors)
     return render_template('EditProfile.html', form=form)
-
-
 @auth.route('/add_to_cart', methods=['POST'])
 @login_required
 def add_to_cart():
@@ -299,7 +297,6 @@ def cart():
         total_cost += product.price * cart_item.quantity
 
     return render_template('cart.html', cart_items=cart_items, total_cost=total_cost)
-
 @auth.route('/checkout', methods=['POST'])
 @login_required
 def checkout():
@@ -328,6 +325,7 @@ def checkout():
 
     # Move cart items to order items and update the product quantity
     for cart_item in cart_items:
+
         product = Book.query.get(cart_item.product_id)
         if not product:
             continue
