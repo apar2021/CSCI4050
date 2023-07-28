@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request,session
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
 from .models import User
 from . import db, mail
@@ -289,5 +289,53 @@ def cart():
         total_cost += product.price * cart_item.quantity
 
     return render_template('cart.html', cart_items=cart_items, total_cost=total_cost)
+@auth.route('/checkout', methods=['POST'])
+@login_required
+def checkout():
+    cart_items = Cart.query.filter_by(user_id=current_user.id).all()
+
+    if not cart_items:
+        flash('Your cart is empty.', 'error')
+        return redirect(url_for('home'))
+
+    total_cost = 0
+    for cart_item in cart_items:
+        product = Product.query.get(cart_item.product_id)
+        if not product:
+            continue
+
+        total_cost += product.price * cart_item.quantity
+
+        # Check if the product quantity is sufficient for the order
+        if product.quantity < cart_item.quantity:
+            flash(f'Not enough stock available for {product.name}.', 'error')
+            return redirect(url_for('cart'))
+
+    # Create a new order
+    order = Order(user_id=current_user.id, total_cost=total_cost)
+    db.session.add(order)
+
+    # Move cart items to order items and update the product quantity
+    for cart_item in cart_items:
+        product = Product.query.get(cart_item.product_id)
+        if not product:
+            continue
+
+        order_item = OrderItem(order_id=order.id, product_id=product.id, quantity=cart_item.quantity, price=product.price)
+        db.session.add(order_item)
+
+        product.quantity -= cart_item.quantity
+        db.session.delete(cart_item)
+
+    db.session.commit()
+    flash('Order placed successfully!', 'success')
+    return redirect(url_for('orders'))
+
+@auth.route('/orders')
+@login_required
+def orders():
+    orders = Order.query.filter_by(user_id=current_user.id).all()
+    return render_template('orders.html', orders=orders)
+
 
 
