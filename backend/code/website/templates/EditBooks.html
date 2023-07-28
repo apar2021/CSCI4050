@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5EACF;
+            color: #4F583D;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        ul.horizontal-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #8A584C; /* Updated color */
+        }
+
+        ul.horizontal-menu li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        ul.horizontal-menu li a {
+            display: block;
+            color: #fff; /* Updated color */
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.horizontal-menu li a:hover {
+            background-color: #70463e; /* Updated color */
+        }
+        
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #8A584C;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #8A584C;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        
+        input[type="submit"] {
+            width: 100%;
+            background-color: #8A584C;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #70463e;
+        }
+        
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .forgot-password a {
+            color: #8A584C;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <ul class="horizontal-menu">
+        <li><a href="{{ url_for('views.home') }}">Home</a></li>
+        <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_admin %}
+                <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+                <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+                <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+            {% else %}
+                <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+                <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+                <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+            <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
+    </ul>
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+        
+
+    <h1>Edit Books</h1>
+        <form>
+        <label for="isbn">ISBN:</label>
+        <input type="text" id="isbn" name="isbn" required><br>
+    
+        <label for="category">Category:</label>
+        <input type="text" id="category" name="category" required><br>
+    
+        <label for="authors">Authors' Names:</label>
+        <input type="text" id="authors" name="authors" required><br>
+    
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+    
+        <label for="image-url">Image URL:</label>
+        <input type="text" id="image-url" name="image-url" required><br>
+    
+        <label for="edition">Edition:</label>
+        <input type="text" id="edition" name="edition" required><br>
+    
+        <label for="publisher">Publisher:</label>
+        <input type="text" id="publisher" name="publisher" required><br>
+    
+        <label for="publication-year">Publication Year:</label>
+        <input type="text" id="publication-year" name="publication-year" required><br>
+    
+        <label for="quantity-in-stock">Quantity in Stock:</label>
+        <input type="number" id="quantity-in-stock" name="quantity-in-stock" required><br>
+    
+        <label for="minimum-threshold">Minimum Threshold:</label>
+        <input type="number" id="minimum-threshold" name="minimum-threshold" required><br>
+    
+        <label for="buying-price">Buying Price:</label>
+        <input type="number" id="buying-price" name="buying-price" step="0.01" required><br>
+    
+        <label for="selling-price">Selling Price:</label>
+        <input type="number" id="selling-price" name="selling-price" step="0.01" required><br>
+    
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
