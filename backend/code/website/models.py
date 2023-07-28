@@ -91,4 +91,131 @@ class User(db.Model, UserMixin):
     def decrypt_security_code(self):
         if self.security_code_encrypted:
             return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
+# Table containing Book Information
+class Book(db.Model, UserMixin):
+    __tablename__="books"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+
+    # book attributes
+    isbn = db.Column(db.Integer)
+    title = db.Column(db.String(150))
+    author = db.Column(db.String(150))
+    edition = db.Column(db.String(50))
+    category = db.Column(db.String(100))
+    publisher = db.Column(db.String(150))
+    publication_year = db.Column(db.Integer)
+
+    def __init__(self, isbn, title, author, edition, category, publisher, publication_year):
+        self.isbn = isbn
+        self.title = title
+        self.author = author
+        self.edition = edition
+        self.category = category
+        self.publisher = publisher
+        self.publication_year = publication_year
+
+# Table containing Inventory Information
+class Inventory(db.Model, UserMixin):
+    __tablename__="inventory"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+    bookid = db.Column(db.Integer, db.ForeignKey('books.id'))
+    quantity = db.Column(db.Integer)
+    status = db.Column(db.String(150))
+    selling_price = db.Column(db.Float)
+    buying_price = db.Column(db.Float)
+    min_threshold = db.Column(db.Integer)
+
+    def __init__(self, bookid, quantity, status, selling_price, buying_price, min_threshold):
+        self.bookid = bookid
+        self.quantity = quantity
+        self.status = status
+        self.selling_price = selling_price
+        self.buying_price = buying_price
+        self.min_threshold = min_threshold
+
+# Table containing Promotion Information
+class Promotion(db.Model, UserMixin):
+    __tablename__="promotion"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+    discount = db.Column(db.Float)
+    promotion_start_date = db.Column(db.DateTime)
+    promotion_end_date = db.Column(db.DateTime)
+
+    def __init__(self, discount, promotion_start_date, promotion_end_date):
+        self.discount = discount
+        self.promotion_start_date = promotion_start_date
+        self.promotion_end_date = promotion_end_date
+
+# Table containing associations between users and carts
+# Create a new cart entry for the user after every checkout
+class Cart(db.Model, UserMixin):
+    __tablename__="cart"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __init__(self, userid):
+        self.userid = userid
+
+# Table containing associations between carts and book items
+class CartItems(db.Model, UserMixin):
+    __tablename__="cart_items"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+    cartid = db.Column(db.Integer, db.ForeignKey('cart.id'))
+    bookid = db.Column(db.Integer, db.ForeignKey('books.id'))
+    quantity = db.Column(db.Integer)
+
+    def __init__(self, cartid, bookid, quantity):
+        self.cartid = cartid
+        self.bookid = bookid
+        self.quantity = quantity
+
+# Table containing associations between carts and transactions
+class Transaction(db.Model, UserMixin):
+    __tablename__="transaction"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+    cartid = db.Column(db.Integer, db.ForeignKey('cart.id'))
+
+    # Number of times the order has been placed
+    quantity = db.Column(db.Integer)  
+
+    def __init__(self, cartid, quantity):
+        self.cartid = cartid
+        self.quantity = quantity
+
+# Table containing information about past orders
+class Order(db.Model, UserMixin):
+    __tablename__="order"
+
+    # primary key
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('users.id'))
+    transactionid = db.Column(db.Integer, db.ForeignKey('transaction.id'))
+    # Todo: Change to cardid
+    card_number = db.Column(db.Integer, db.ForeignKey('users.card_number_encrypted'))
+    #cardid = db.Column(db.Integer, db.ForeignKey('card.id'))
+    # The total price is the price of the transaction times its quanitity
+    total_price = db.Column(db.Float)
+    promotionid = db.Column(db.Integer, db.ForeignKey('promotion.id'))
+    order_date = db.Column(db.DateTime)
+
+    def __init__(self, userid, transactionid, cardid, total_price, promotionid, order_date):
+        self.userid = userid
+        self.transactionid = transactionid
+        self.cardid = cardid
+        self.total_price = total_price
+        self.promotionid = promotionid
+        self.order_date = order_date
+
         return None
