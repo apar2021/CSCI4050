@@ -106,8 +106,10 @@ class Book(db.Model, UserMixin):
     category = db.Column(db.String(100))
     publisher = db.Column(db.String(150))
     publication_year = db.Column(db.Integer)
+    publication_year = db.Column(db.Integer)
+    image_url = db.Column(db.String(300))
 
-    def __init__(self, isbn, title, author, edition, category, publisher, publication_year):
+    def __init__(self, isbn, title, author, edition, category, publisher, publication_year, image_url):
         self.isbn = isbn
         self.title = title
         self.author = author
@@ -115,6 +117,7 @@ class Book(db.Model, UserMixin):
         self.category = category
         self.publisher = publisher
         self.publication_year = publication_year
+        self.image_url = image_url
 
 # Table containing Inventory Information
 class Inventory(db.Model, UserMixin):

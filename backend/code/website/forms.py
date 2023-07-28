@@ -42,14 +42,14 @@ class EditProfileForm(FlaskForm):
     submit = SubmitField('Save Changes')
 
 class AddBookForm(FlaskForm):
-    isbn = StringField('ISBN:', validators=[DataRequired()])
+    isbn = IntegerField('ISBN:', validators=[DataRequired()])
     category = StringField('Category:', validators=[DataRequired()])
-    authors = StringField("Authors' Names:", validators=[DataRequired()])
+    author = StringField("Authors' Names:", validators=[DataRequired()])
     title = StringField('Title:', validators=[DataRequired()])
     image_url = StringField('Image URL:', validators=[DataRequired(), URL()])
     edition = StringField('Edition:', validators=[DataRequired()])
     publisher = StringField('Publisher:', validators=[DataRequired()])
-    publication_year = StringField('Publication Year:', validators=[DataRequired()])
+    publication_year = IntegerField('Publication Year:', validators=[DataRequired()])
     quantity_in_stock = IntegerField('Quantity in Stock:', validators=[DataRequired()])
     minimum_threshold = IntegerField('Minimum Threshold:', validators=[DataRequired()])
     buying_price = DecimalField('Buying Price:', places=2, validators=[DataRequired()])

@@ -6,11 +6,12 @@ from . import db
 admin = Blueprint('admin', __name__)
 
 
-@admin.route('/add-book')
+@admin.route('/add-book', methods=['GET', 'POST'])
 def add_book():
     form = AddBookForm()
     
     if form.validate_on_submit():
+        print(form.data)
         # Create a new Book instance and populate it with form data
         new_book = Book(
             isbn=form.isbn.data,
@@ -46,7 +47,7 @@ def add_book():
     return render_template('AddBooks.html', form = form)
 
 
-@admin.route('/add-promo')
+@admin.route('/add-promo', methods=['GET', 'POST'])
 def add_promo():
     
     form = PromoCodeForm()
