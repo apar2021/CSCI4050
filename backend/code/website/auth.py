@@ -235,7 +235,7 @@ def add_to_cart():
     product_id = int(request.form['product_id'])
     quantity = int(request.form['quantity'])
 
-    product = Product.query.get(product_id)
+    product = Book.query.get(product_id)
     if not product:
         flash('Product not found.', 'error')
         return redirect(url_for('index'))
@@ -253,7 +253,7 @@ def add_to_cart():
         db.session.commit()
         flash('Item added to cart.', 'success')
 
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 @auth.route('/remove_from_cart', methods=['POST'])
 @login_required
@@ -282,7 +282,7 @@ def cart():
     total_cost = 0
 
     for cart_item in cart_items:
-        product = Product.query.get(cart_item.product_id)
+        product = Book.query.get(cart_item.product_id)
         if not product:
             continue
 
