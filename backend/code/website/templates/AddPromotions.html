@@ -137,10 +137,12 @@
         <input type="text" id="percentage" name="percentage" required>
 
         <label for="start-date">Start Date:</label>
-        <input type="text" id="start_date" name="start_date" required>
+        <input type="date" id="start_date" name="start_date" required>
+
+        <br>
 
         <label for="expiration-date">Expiration Date:</label>
-        <input type="text" id="expiration_date" name="expiration_date" required>
+        <input type="date" id="expiration_date" name="expiration_date" required>
 
         <input type="submit" value="Submit">
         {{ form.csrf_token }}
