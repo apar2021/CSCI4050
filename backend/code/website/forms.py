@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Email, Length, NumberRange, EqualTo, Optional
+from wtforms import StringField, IntegerField, PasswordField, SubmitField, DecimalField
+from wtforms.validators import DataRequired, Email, Length, URL, EqualTo, Optional
 
 class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(max=150)])
@@ -40,4 +40,19 @@ class EditProfileForm(FlaskForm):
     security_code = PasswordField('Security Code')
 
     submit = SubmitField('Save Changes')
+
+class AddBookForm(FlaskForm):
+    isbn = StringField('ISBN:', validators=[DataRequired()])
+    category = StringField('Category:', validators=[DataRequired()])
+    authors = StringField("Authors' Names:", validators=[DataRequired()])
+    title = StringField('Title:', validators=[DataRequired()])
+    image_url = StringField('Image URL:', validators=[DataRequired(), URL()])
+    edition = StringField('Edition:', validators=[DataRequired()])
+    publisher = StringField('Publisher:', validators=[DataRequired()])
+    publication_year = StringField('Publication Year:', validators=[DataRequired()])
+    quantity_in_stock = IntegerField('Quantity in Stock:', validators=[DataRequired()])
+    minimum_threshold = IntegerField('Minimum Threshold:', validators=[DataRequired()])
+    buying_price = DecimalField('Buying Price:', places=2, validators=[DataRequired()])
+    selling_price = DecimalField('Selling Price:', places=2, validators=[DataRequired()])
+    submit = SubmitField('Submit')
     
