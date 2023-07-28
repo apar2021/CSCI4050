@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Promotions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5EACF;
+            color: #4F583D;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        ul.horizontal-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #8A584C; /* Updated color */
+        }
+
+        ul.horizontal-menu li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        ul.horizontal-menu li a {
+            display: block;
+            color: #fff; /* Updated color */
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.horizontal-menu li a:hover {
+            background-color: #70463e; /* Updated color */
+        }
+        
+        form {
+            max-width: 300px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            font-weight: bold;
+        }
+        
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: block;
+            border: 1px solid #8A584C;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+        
+        input[type="submit"] {
+            width: 100%;
+            background-color: #8A584C;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        input[type="submit"]:hover {
+            background-color: #70463e;
+        }
+        
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .forgot-password a {
+            color: #8A584C;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <ul class="horizontal-menu">
+        <li><a href="{{ url_for('views.home') }}">Home</a></li>
+        <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_admin %}
+                <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+                <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+                <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+            {% else %}
+                <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+                <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+                <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+            <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
+    </ul>
+
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+        
+
+
+
+    <h1>Add Promotions</h1>
+
+    <form>
+        <label for="promo-code">Promo Code:</label>
+        <input type="text" id="promo-code" name="promo-code" required>
+
+        <label for="percentage">Percentage:</label>
+        <input type="text" id="percentage" name="percentage" required>
+
+        <label for="start-date">Start Date:</label>
+        <input type="text" id="start-date" name="start-date" required>
+
+        <label for="expiration-date">Expiration Date:</label>
+        <input type="text" id="expiration-date" name="expiration-date" required>
+
+        <input type="submit" value="Submit">
+        {{ form.csrf_token }}
+    </form>
+</body>
+</html>

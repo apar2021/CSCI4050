@@ -7,25 +7,53 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      background-color: #F5EACF;
+      color: #4F583D;
+      padding: 20px;
     }
     
     h1 {
-      margin-bottom: 10px;
+      text-align: center;
+      margin-bottom: 20px;
     }
     
-    .cart {
+    ul.horizontal-menu {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #8A584C;
+    }
+
+    ul.horizontal-menu li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    ul.horizontal-menu li a {
+      display: block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    ul.horizontal-menu li a:hover {
+      background-color: #70463e;
+    }
+    
+    .cart-item {
       border: 1px solid #ccc;
       padding: 10px;
       margin-bottom: 20px;
     }
     
-    .cart-details {
+    .cart-item-details {
       margin-bottom: 10px;
     }
     
     .remove-button {
-      background-color: #f44336;
+      background-color: #8A584C;
       border: none;
       color: white;
       padding: 10px 20px;
@@ -37,8 +65,20 @@
       cursor: pointer;
     }
     
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 10px;
+    }
+
+    th, td {
+      border: 1px solid #8A584C;
+      padding: 8px;
+      text-align: left;
+    }
+    
     .checkout-button {
-      background-color: #4CAF50;
+      background-color: #8A584C;
       border: none;
       color: white;
       padding: 10px 20px;
@@ -59,39 +99,55 @@
   </style>
 </head>
 <body>
+  <ul class="horizontal-menu">
+    <li><a href="{{ url_for('views.home') }}">Home</a></li>
+    <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+    {% if current_user.is_authenticated %}
+        {% if current_user.is_admin %}
+            <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+            <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+        {% else %}
+            <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+            <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+            <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+        <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+    {% endif %}
+  </ul>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-messages">
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+  {% endwith %}
+
   <h1>Cart</h1>
-  
-  <div class="cart">
+
+  <div class="cart-item">
+    <div class="cart-item-details">
+      <h3>The Great Gatsby</h3>
+      <p>Author: F. Scott Fitzgerald</p>
+      <p>Price: $10.99</p>
+    </div>
     
-   <table>
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-        </tr>
-        {% for product_id, quantity in cart.items() %}
-            <tr>
-                <td>{{ product_id }}</td>
-                <td>{{ quantity }}</td>
-                <td>
-                    <form action="/remove_from_cart" method="post">
-                        <input type="hidden" name="product_id" value="{{ product_id }}">
-                        <input type="number" name="quantity" value="1" min="1">
-                        <input type="submit" value="Remove">
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <!-- Display the cart total -->
-    <p>Total: ${{ calculate_cart_total() }}</p>
-
-    <!-- Add more features or checkout button here -->
-
+    <label for="quantity">Quantity:</label>
+    <input class="quantity-input" type="number" id="quantity" value="1" min="1">
+    
     <button class="remove-button">Remove from Cart</button>
   </div>
-  
-  <button class="checkout-button">Proceed to Checkout</button>
-  <p>Total: ${{ calculate_cart_total() }}</p>
+
+  <!-- Add more cart items if necessary -->
+
+    <button class="checkout-button"><a href="Checkout.html" style="color: white; text-decoration: none;">Proceed to Checkout</a></button>
 </body>
 </html>

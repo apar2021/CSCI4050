@@ -1,73 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Order History</title>
-  <style>
 
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    
-    h1 {
-      margin-bottom: 10px;
-    }
-    
-    .order {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-bottom: 20px;
-    }
-    
-    .order-details {
-      margin-bottom: 10px;
-    }
-    
-    .reorder-button {
-      background-color: #4CAF50;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-  </style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5EACF;
+            color: #4F583D;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        ul.horizontal-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #8A584C;
+        }
+
+        ul.horizontal-menu li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        ul.horizontal-menu li a {
+            display: block;
+            color: #fff;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.horizontal-menu li a:hover {
+            background-color: #70463e;
+        }
+
+        .order {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-details {
+            margin-bottom: 10px;
+        }
+
+        .reorder-button {
+            background-color: #8A584C;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .reorder-button:hover {
+            background-color: #70463e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #8A584C;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #8A584C;
+            color: #fff;
+        }
+    </style>
 </head>
+
 <body>
-  <h1>Order History</h1>
-  
-  <div class="order">
-    <div class="order-details">
-      <h3>Order ID: 123456</h3>
-      <p>Order Date: January 1, 2023</p>
-      <p>Shipping Address: 123 Main Street, Anytown, USA</p>
+    <ul class="horizontal-menu">
+        <li><a href="{{ url_for('views.home') }}">Home</a></li>
+        <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+        {% if current_user.is_authenticated %}
+        {% if current_user.is_admin %}
+        <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+        <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+        <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+        {% else %}
+        <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+        <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+        <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+        {% endif %}
+        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+        <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
+    </ul>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
     </div>
-    
-    <table>
-      <thead>
-        <tr>
-          <th>Book Title</th>
-          <th>Author</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>The Great Gatsby</td>
-          <td>F. Scott Fitzgerald</td>
-          <td>$10.99</td>
-        </tr>
-      </tbody>
-    </table>
-    
-    <button class="reorder-button">Reorder</button>
-  </div>
-  
+    {% endif %}
+    {% endwith %}
+
+    <h1>Order History</h1>
+
+    <div class="order">
+        <div class="order-details">
+            <h3>Order ID: 123456</h3>
+            <p>Order Date: January 1, 2023</p>
+            <p>Shipping Address: 123 Main Street, Anytown, USA</p>
+            <p>Customer Name: John Doe</p>
+            <p>Confirmation Number: ABC123XYZ</p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>The Great Gatsby</td>
+                    <td>F. Scott Fitzgerald</td>
+                    <td>$10.99</td>
+                </tr>
+                <!-- Add more rows for other ordered items if necessary -->
+            </tbody>
+        </table>
+
+        <p>Total Amount: $10.99</p>
+
+        <button class="reorder-button">Reorder</button>
+    </div>
 </body>
+
 </html>
