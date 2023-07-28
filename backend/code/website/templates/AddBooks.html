@@ -144,13 +144,13 @@
         <input type="text" id="category" name="category" required><br>
     
         <label for="authors">Authors' Names:</label>
-        <input type="text" id="authors" name="authors" required><br>
+        <input type="text" id="author" name="authors" required><br>
     
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required><br>
     
         <label for="image-url">Image URL:</label>
-        <input type="text" id="image-url" name="image-url" required><br>
+        <input type="text" id="image_url" name="image-url" required><br>
     
         <label for="edition">Edition:</label>
         <input type="text" id="edition" name="edition" required><br>
@@ -159,20 +159,21 @@
         <input type="text" id="publisher" name="publisher" required><br>
     
         <label for="publication-year">Publication Year:</label>
-        <input type="text" id="publication-year" name="publication-year" required><br>
+        <input type="text" id="publication_year" name="publication-year" required><br>
     
         <label for="quantity-in-stock">Quantity in Stock:</label>
-        <input type="number" id="quantity-in-stock" name="quantity-in-stock" required><br>
+        <input type="number" id="quantity_in_stock" name="quantity-in-stock" required><br>
     
         <label for="minimum-threshold">Minimum Threshold:</label>
-        <input type="number" id="minimum-threshold" name="minimum-threshold" required><br>
+        <input type="number" id="minimum_threshold" name="minimum-threshold" required><br>
     
         <label for="buying-price">Buying Price:</label>
-        <input type="number" id="buying-price" name="buying-price" step="0.01" required><br>
+        <input type="number" id="buying_price" name="buying-price" step="0.01" required><br>
     
         <label for="selling-price">Selling Price:</label>
-        <input type="number" id="selling-price" name="selling-price" step="0.01" required><br>
-    
+        <input type="number" id="selling_price" name="selling-price" step="0.01" required><br>
+            
+        {{ form.csrf_token }}
         <input type="submit" value="Submit">
     </form>
 </body>

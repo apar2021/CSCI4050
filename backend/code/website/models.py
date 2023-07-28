@@ -143,14 +143,16 @@ class Promotion(db.Model, UserMixin):
 
     # primary key
     id = db.Column(db.Integer, primary_key=True)
-    discount = db.Column(db.Float)
-    promotion_start_date = db.Column(db.DateTime)
-    promotion_end_date = db.Column(db.DateTime)
+    promo_code = db.Column(db.String)
+    percentage = db.Column(db.Float)
+    start_date = db.Column(db.DateTime)
+    expiration_date = db.Column(db.DateTime)
 
-    def __init__(self, discount, promotion_start_date, promotion_end_date):
-        self.discount = discount
-        self.promotion_start_date = promotion_start_date
-        self.promotion_end_date = promotion_end_date
+    def __init__(self, percentage, start_date, expiration_date, promo_code):
+        self.promo_code = promo_code
+        self.percentage = percentage
+        self.start_date = start_date
+        self.expiration_date = expiration_date
 
 # Table containing associations between users and carts
 # Create a new cart entry for the user after every checkout

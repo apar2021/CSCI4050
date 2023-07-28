@@ -1,12 +1,12 @@
 from flask import Blueprint, flash, redirect, url_for, render_template
-from .models import Book
-from .forms import AddBookForm
+from .models import Book, Promotion, Inventory
+from .forms import AddBookForm, PromoCodeForm
 from . import db
 
 admin = Blueprint('admin', __name__)
 
 
-@admin.register('/add-book')
+@admin.route('/add-book')
 def add_book():
     form = AddBookForm()
     
@@ -15,29 +15,62 @@ def add_book():
         new_book = Book(
             isbn=form.isbn.data,
             category=form.category.data,
-            authors=form.authors.data,
+            author=form.author.data,
             title=form.title.data,
             image_url=form.image_url.data,
             edition=form.edition.data,
             publisher=form.publisher.data,
             publication_year=form.publication_year.data,
-            quantity_in_stock=form.quantity_in_stock.data,
-            minimum_threshold=form.minimum_threshold.data,
-            buying_price=form.buying_price.data,
-            selling_price=form.selling_price.data
         )
+
+        new_inventory = Inventory(
+            bookid = new_book.id,
+            quantity = form.quantity_in_stock.data,
+            status= "Available",
+            selling_price = form.selling_price.data,
+            buying_price = form.buying_price.data,
+            min_threshold = form.minimum_threshold.data
+        )
+
 
         # Add the new book to the database
         db.session.add(new_book)
+        db.session.add(new_inventory)
         db.session.commit()
 
         flash('The book has been added successfully.', 'success')
         return redirect(url_for('admin.add_book'))
-
-    return render_template('AddBooks.html')
-
-@admin.register('/add-promo')
-def add_promo():
-
     
-    return render_template('AddPromotions.html')
+    print('1')
+    print(form.errors)
+    return render_template('AddBooks.html', form = form)
+
+
+@admin.route('/add-promo')
+def add_promo():
+    
+    form = PromoCodeForm()
+
+    if form.validate_on_submit():
+        # Retrieve data from the form after validation
+        promo_code = form.promo_code.data
+        percentage = form.percentage.data
+        start_date = form.start_date.data
+        expiration_date = form.expiration_date.data
+
+        # Create a new PromoCode instance and populate it with form data
+        new_promo = Promotion(
+            promo_code=promo_code,
+            percentage=percentage,
+            start_date=start_date,
+            expiration_date=expiration_date
+        )
+
+        # Add the new promo code to the database
+        db.session.add(new_promo)
+        db.session.commit()
+
+        flash('The promo code has been added successfully.', 'success')
+        return redirect(url_for('admin.add_promo'))
+    
+    return render_template('AddPromotions.html', form = form)

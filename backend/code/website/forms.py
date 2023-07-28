@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, SubmitField, DecimalField
+from wtforms import StringField, IntegerField, PasswordField, SubmitField, DecimalField, DateField
 from wtforms.validators import DataRequired, Email, Length, URL, EqualTo, Optional
 
 class RegistrationForm(FlaskForm):
@@ -56,3 +56,10 @@ class AddBookForm(FlaskForm):
     selling_price = DecimalField('Selling Price:', places=2, validators=[DataRequired()])
     submit = SubmitField('Submit')
     
+
+class PromoCodeForm(FlaskForm):
+    promo_code = StringField('Promo Code:', validators=[DataRequired()])
+    percentage = StringField('Percentage:', validators=[DataRequired()])
+    start_date = DateField('Start Date:', format='%Y-%m-%d', validators=[DataRequired()])
+    expiration_date = DateField('Expiration Date:', format='%Y-%m-%d', validators=[DataRequired()])
+    submit = SubmitField('Submit')
