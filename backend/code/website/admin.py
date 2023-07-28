@@ -1,5 +1,5 @@
 from flask import Blueprint, flash, redirect, url_for, render_template
-from .models import Book, Promotion, Inventory
+from .models import Book, Promotion
 from .forms import AddBookForm, PromoCodeForm
 from . import db
 
@@ -22,16 +22,6 @@ def add_book():
             edition=form.edition.data,
             publisher=form.publisher.data,
             publication_year=form.publication_year.data,
-        )
-
-        # Add the new book to the database
-        db.session.add(new_book)
-        db.session.commit()
-
-        recent_book = Book.query.filter_by(isbn=form.isbn.data).first()
-
-        new_inventory = Inventory(
-            bookid = recent_book.id,
             quantity = form.quantity_in_stock.data,
             status= "Available",
             selling_price = form.selling_price.data,
@@ -39,7 +29,8 @@ def add_book():
             min_threshold = form.minimum_threshold.data
         )
 
-        db.session.add(new_inventory)
+        # Add the new book to the database
+        db.session.add(new_book)
         db.session.commit()
 
         flash('The book has been added successfully.', 'success')

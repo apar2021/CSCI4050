@@ -108,8 +108,14 @@ class Book(db.Model, UserMixin):
     publication_year = db.Column(db.Integer)
     publication_year = db.Column(db.Integer)
     image_url = db.Column(db.String(300))
+    quantity = db.Column(db.Integer)
+    status = db.Column(db.String(150))
+    selling_price = db.Column(db.Float)
+    buying_price = db.Column(db.Float)
+    min_threshold = db.Column(db.Integer)
 
-    def __init__(self, isbn, title, author, edition, category, publisher, publication_year, image_url):
+    def __init__(self, isbn, title, author, edition, category, publisher, publication_year, image_url,
+                 quantity, status, selling_price, buying_price, min_threshold):
         self.isbn = isbn
         self.title = title
         self.author = author
@@ -118,22 +124,6 @@ class Book(db.Model, UserMixin):
         self.publisher = publisher
         self.publication_year = publication_year
         self.image_url = image_url
-
-# Table containing Inventory Information
-class Inventory(db.Model, UserMixin):
-    __tablename__="inventory"
-
-    # primary key
-    id = db.Column(db.Integer, primary_key=True)
-    bookid = db.Column(db.Integer, db.ForeignKey('books.id'))
-    quantity = db.Column(db.Integer)
-    status = db.Column(db.String(150))
-    selling_price = db.Column(db.Float)
-    buying_price = db.Column(db.Float)
-    min_threshold = db.Column(db.Integer)
-
-    def __init__(self, bookid, quantity, status, selling_price, buying_price, min_threshold):
-        self.bookid = bookid
         self.quantity = quantity
         self.status = status
         self.selling_price = selling_price
