@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request,session
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
-from .models import User
+from .models import User, Book, Order, Cart, CartItems
 from . import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash 
 from flask_login import login_user, current_user, logout_user, login_required
@@ -229,6 +229,7 @@ def edit_profile():
 
     print(form.errors)
     return render_template('EditProfile.html', form=form)
+
 @auth.route('/add_to_cart', methods=['POST'])
 @login_required
 def add_to_cart():
@@ -289,6 +290,7 @@ def cart():
         total_cost += product.price * cart_item.quantity
 
     return render_template('cart.html', cart_items=cart_items, total_cost=total_cost)
+  
 @auth.route('/checkout', methods=['POST'])
 @login_required
 def checkout():
@@ -300,7 +302,7 @@ def checkout():
 
     total_cost = 0
     for cart_item in cart_items:
-        product = Product.query.get(cart_item.product_id)
+        product = Book.query.get(cart_item.product_id)
         if not product:
             continue
 
@@ -317,11 +319,11 @@ def checkout():
 
     # Move cart items to order items and update the product quantity
     for cart_item in cart_items:
-        product = Product.query.get(cart_item.product_id)
+        product = Book.query.get(cart_item.product_id)
         if not product:
             continue
 
-        order_item = OrderItem(order_id=order.id, product_id=product.id, quantity=cart_item.quantity, price=product.price)
+        order_item = Order(order_id=order.id, product_id=product.id, quantity=cart_item.quantity, price=product.price)
         db.session.add(order_item)
 
         product.quantity -= cart_item.quantity
@@ -336,6 +338,3 @@ def checkout():
 def orders():
     orders = Order.query.filter_by(user_id=current_user.id).all()
     return render_template('orders.html', orders=orders)
-
-
-
