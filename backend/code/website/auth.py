@@ -20,9 +20,7 @@ def login():
 
     if form.validate_on_submit():
         # Check if the user exists in the database
-        print(1)
         user = User.query.filter_by(email=form.email.data).first()
-        print(2)
         if user and check_password_hash(user.password, form.password.data):
             if user.is_verified:
                 login_user(user)
@@ -31,14 +29,11 @@ def login():
                 return redirect(url_for('views.home'))
             else:
                 flash('Account Not Verified. Please Verify Account.', 'error')
-                #return redirect(url_for('auth.login'))
         else:
             flash('Invalid email or password. Please try again.', 'error')
-            #return redirect(url_for('auth.login'))
     else:
-        flash('Missing Input Information', 'error')
-        print("START ERRORS: ", form.errors)
-        #return redirect(url_for('auth.login'))
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Login.html', form = form)
 
@@ -78,9 +73,12 @@ def signup():
         msg = Message('Account Verification', sender='your_gmail_username', recipients=[email])
         msg.body = f'Click the following link to verify your account: {url_for("auth.verify_account", token=token, _external=True)}'
         mail.send(msg)
-
+        
         flash('Registration successful! You may proceed to the email verification page.', 'success')
         return redirect(url_for('auth.email_verification'))
+    else:
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
 
     return render_template('Registration.html', form = form)
 
