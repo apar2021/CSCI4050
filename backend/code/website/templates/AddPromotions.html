@@ -129,18 +129,18 @@
 
     <h1>Add Promotions</h1>
 
-    <form>
+    <form method= "post" action = "{{ url_for('admin.add_promo') }}">
         <label for="promo-code">Promo Code:</label>
-        <input type="text" id="promo_code" name="promo-code" required>
+        <input type="text" id="promo_code" name="promo_code" required>
 
         <label for="percentage">Percentage:</label>
         <input type="text" id="percentage" name="percentage" required>
 
         <label for="start-date">Start Date:</label>
-        <input type="text" id="start_date" name="start-date" required>
+        <input type="text" id="start_date" name="start_date" required>
 
         <label for="expiration-date">Expiration Date:</label>
-        <input type="text" id="expiration_date" name="expiration-date" required>
+        <input type="text" id="expiration_date" name="expiration_date" required>
 
         <input type="submit" value="Submit">
         {{ form.csrf_token }}

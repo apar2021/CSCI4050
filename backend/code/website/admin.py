@@ -24,8 +24,14 @@ def add_book():
             publication_year=form.publication_year.data,
         )
 
+        # Add the new book to the database
+        db.session.add(new_book)
+        db.session.commit()
+
+        recent_book = Book.query.filter_by(isbn=form.isbn.data).first()
+
         new_inventory = Inventory(
-            bookid = new_book.id,
+            bookid = recent_book.id,
             quantity = form.quantity_in_stock.data,
             status= "Available",
             selling_price = form.selling_price.data,
@@ -33,9 +39,6 @@ def add_book():
             min_threshold = form.minimum_threshold.data
         )
 
-
-        # Add the new book to the database
-        db.session.add(new_book)
         db.session.add(new_inventory)
         db.session.commit()
 
@@ -53,18 +56,13 @@ def add_promo():
     form = PromoCodeForm()
 
     if form.validate_on_submit():
-        # Retrieve data from the form after validation
-        promo_code = form.promo_code.data
-        percentage = form.percentage.data
-        start_date = form.start_date.data
-        expiration_date = form.expiration_date.data
 
         # Create a new PromoCode instance and populate it with form data
         new_promo = Promotion(
-            promo_code=promo_code,
-            percentage=percentage,
-            start_date=start_date,
-            expiration_date=expiration_date
+            promo_code = form.promo_code.data,
+            percentage = form.percentage.data,
+            start_date = form.start_date.data,
+            expiration_date = form.expiration_date.data
         )
 
         # Add the new promo code to the database
