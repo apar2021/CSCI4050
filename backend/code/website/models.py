@@ -49,6 +49,10 @@ class User(db.Model, UserMixin):
     encryption_key = Fernet.generate_key()
     encryptor = Fernet(encryption_key)
 
+    
+    cart = db.relationship("Cart", backref="user", uselist=False)
+
+
     def __init__(self, name, phone, email, password, 
                  street="", city="", state="", country="", zipcode=None, 
                  card_type="", card_number=None, expiration_date="", security_code=None,
