@@ -64,5 +64,6 @@ class PromoCodeForm(FlaskForm):
     expiration_date = DateField('Expiration Date:', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-class BookThumbnail(FlaskForm):
+class BookThumbnailForm(FlaskForm):
+    book_id = IntegerField('Book ID:', validators=[DataRequired()])
     submit = SubmitField('Add to Cart')

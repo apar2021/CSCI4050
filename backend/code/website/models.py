@@ -160,7 +160,7 @@ class Cart(db.Model, UserMixin):
         self.userid = userid
 
 # Table containing associations between carts and book items
-class CartItems(db.Model, UserMixin):
+class CartItem(db.Model, UserMixin):
     __tablename__="cart_items"
 
     # primary key

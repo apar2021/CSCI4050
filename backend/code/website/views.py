@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from flask_login import login_required
 from .models import Book
 import random
 views = Blueprint('views', __name__)
@@ -16,6 +17,7 @@ def home():
     else:
         random_books = all_books
 
+    # Get the 4 most recent books added to the database, reverse the list
     new_books = all_books[::-1][:4]
 
 
@@ -24,6 +26,7 @@ def home():
 
 
 @views.route('/cart')
+@login_required
 def cart():
     return render_template('Cart.html')
 
