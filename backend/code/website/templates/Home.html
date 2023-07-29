@@ -231,6 +231,7 @@
           <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
           <input type="hidden" name="book_id" value="{{ book.id }}">
           <form action="{{ url_for('purchase.add_to_cart', book_id=book.id) }}" method="POST">
+            {{ form.csrf_token }}
             <button class="add-to-cart" type="submit">Add to Cart</button>
           </form>
         </div>

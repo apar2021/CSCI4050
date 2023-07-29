@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, url_for, render_template, request, session
 from .models import Book, Promotion, Cart, CartItem, Order
-#from .forms import AddBookForm, PromoCodeForm
+from .forms import BookThumbnailForm
 from . import db
 
 from flask_login import current_user, login_required
@@ -11,29 +11,32 @@ purchase = Blueprint('purchase', __name__)
 @login_required
 def add_to_cart(book_id, quantity=1):
     # Check if the book exists
-    book_id = request.form.get('book_id') # TEMPORARY
-    book = Book.query.get(book_id)
-    if not book:
-        flash('Book not found.', 'error')
+    #book_id = request.form.get('book_id') # TEMPORARY
+    form = BookThumbnailForm()
+    if form.validate_on_submit():
+        book = Book.query.get(book_id)
+        if not book:
+            flash('Book not found.', 'error')
+            return redirect(url_for('views.home'))
+        
+        # Check if there are enough books in stock
+        if book.quantity < quantity:
+            flash(f'Not enough stock available for {book.name}.', 'error')
+            return redirect(url_for('views.home'))
+        
+        # Get the session cart or create a new one if it doesn't exist
+        cart = session.get('cart', {})
+
+        # Update local cart
+        cart[book_id] = cart.get(book_id, 0) + quantity
+
+        # Update Server Cart
+        session['cart'] = cart
+
+        # Output completion message
+        flash(f'Book{"s" if quantity > 1 else ""} Added To Cart!', 'success')
         return redirect(url_for('views.home'))
-    
-    # Check if there are enough books in stock
-    if book.quantity < quantity:
-        flash(f'Not enough stock available for {book.name}.', 'error')
-        return redirect(url_for('views.home'))
-    
-    # Get the session cart or create a new one if it doesn't exist
-    cart = session.get('cart', {})
-
-    # Update local cart
-    cart[book_id] = cart.get(book_id, 0) + quantity
-
-    # Update Server Cart
-    session['cart'] = cart
-
-    # Output completion message
-    flash(f'Book{"s" if quantity > 1 else ""} Added To Cart!', 'success')
-    return redirect(url_for('views.home'))
+    return render_template('Home.html', form = form)
 
 
 @purchase.route('/remove_from_cart', methods=['POST'])
