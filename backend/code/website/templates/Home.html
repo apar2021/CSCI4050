@@ -228,8 +228,7 @@
         <div class="product-card">
           <img src="{{ book.image_url }}" alt="" />
           <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
-          <p class="current-price">Price you pay: <span>${{ book.price }}</span></p>
-          <p class="shopping-cart">You are saving: ${{ book.discount }}</p>
+          <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
           <button class="add-to-cart">Add to Cart</button>
         </div>
     {% endfor %}
@@ -237,37 +236,14 @@
 
   <section class="product-cards">
     <h2>New Additions<br></h2>
-    <div class="product-card">
-      <img src="https://dummyimage.com/300x300/7EC0EE/000&text=Product+Image+4" alt="" />
-      <h2><a href="five.html">Harry Potter and the Sorcerer’s Stone</a></h2>
-      <p class="current-price">Price you pay <span>$9.99</span></p>
-      <p class="shopping-cart">Your saving $9</p>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-
-    <div class="product-card">
-      <img src="https://dummyimage.com/300x300/7EC0EE/000&text=Product+Image+4" alt="" />
-      <h2><a href="six.html">Lord of the Rings</a></h2>
-      <p class="current-price">Price you pay <span>£9.99</span></p>
-      <p class="shopping-cart">Your saving $9</p>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-
-    <div class="product-card">
-      <img src="https://dummyimage.com/300x300/7EC0EE/000&text=Product+Image+4" alt="" />
-      <h2><a href="seven.html">The Great Gatsby</a></h2>
-      <p class="current-price">Price you pay <span>$9.99</span></p>
-      <p class="shopping-cart">Your saving $9</p>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
-
-    <div class="product-card">
-      <img src="https://dummyimage.com/300x300/7EC0EE/000&text=Product+Image+4" alt="" />
-      <h2><a href="eight.html">Little Women</a></h2>
-      <p class="current-price">Price you pay<span>$10.99</span></p>
-      <p class="shopping-cart">Your saving $8</p>
-      <button class="add-to-cart">Add to Cart</button>
-    </div>
+    {% for book in new_books %}
+        <div class="product-card">
+          <img src="{{ book.image_url }}" alt="" />
+          <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
+          <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
+          <button class="add-to-cart">Add to Cart</button>
+        </div>
+    {% endfor %}
   </section>
 </body>
 

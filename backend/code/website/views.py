@@ -15,11 +15,12 @@ def home():
         random_books = random.sample(all_books, 4)
     else:
         random_books = all_books
-    #random_books = random.sample(all_books, 4)
+
+    new_books = all_books[::-1][:4]
 
 
     # Pass the random_books to the front page (home.html) template
-    return render_template('home.html', featured_books=random_books)
+    return render_template('home.html', featured_books=random_books, new_books=new_books)
 
 
 @views.route('/cart')
