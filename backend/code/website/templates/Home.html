@@ -229,7 +229,10 @@
           <img src="{{ book.image_url }}" alt="" />
           <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
           <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
-          <button class="add-to-cart">Add to Cart</button>
+          <input type="hidden" name="book_id" value="{{ book.id }}">
+          <form action="{{ url_for('purchase.add_to_cart', book_id=book.id) }}" method="POST">
+            <button class="add-to-cart" type="submit">Add to Cart</button>
+          </form>
         </div>
     {% endfor %}
   </section>

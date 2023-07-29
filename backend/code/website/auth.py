@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session
 from .forms import RegistrationForm, LoginForm, ResetPasswordEmailForm, ResetPasswordForm, EditProfileForm
-from .models import User
+from .models import User, Cart
 from . import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash 
 from flask_login import login_user, current_user, logout_user, login_required
@@ -29,6 +29,7 @@ def login():
                     flash('Login successful!', 'success')
                     return redirect(url_for('views.admin_page'))
                 login_user(user)
+                session["cart"] = {}
                 flash('Login successful!', 'success')
                 return redirect(url_for('views.home'))
             else:

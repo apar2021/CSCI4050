@@ -1,5 +1,5 @@
-from flask import Blueprint, flash, redirect, url_for, render_template, request
-from .models import Book, Promotion, Inventory, Cart, CartItems, Order
+from flask import Blueprint, flash, redirect, url_for, render_template, request, session
+from .models import Book, Promotion, Cart, CartItem, Order
 #from .forms import AddBookForm, PromoCodeForm
 from . import db
 
@@ -7,31 +7,34 @@ from flask_login import current_user, login_required
 
 purchase = Blueprint('purchase', __name__)
 
-@purchase.route('/add_to_cart', methods=['POST'])
+@purchase.route('/add_to_cart/<int:book_id>', methods=['POST', 'GET'])
 @login_required
-def add_to_cart():
-    product_id = int(request.form['product_id'])
-    quantity = int(request.form['quantity'])
+def add_to_cart(book_id, quantity=1):
+    # Check if the book exists
+    book_id = request.form.get('book_id') # TEMPORARY
+    book = Book.query.get(book_id)
+    if not book:
+        flash('Book not found.', 'error')
+        return redirect(url_for('views.home'))
+    
+    # Check if there are enough books in stock
+    if book.quantity < quantity:
+        flash(f'Not enough stock available for {book.name}.', 'error')
+        return redirect(url_for('views.home'))
+    
+    # Get the session cart or create a new one if it doesn't exist
+    cart = session.get('cart', {})
 
-    product = Book.query.get(product_id)
-    if not product:
-        flash('Product not found.', 'error')
-        return redirect(url_for('index'))
+    # Update local cart
+    cart[book_id] = cart.get(book_id, 0) + quantity
 
-    if product.quantity < quantity:
-        flash('Not enough stock available.', 'error')
-    else:
-        cart_item = Cart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
-        if cart_item:
-            cart_item.quantity += quantity
-        else:
-            cart_item = Cart(user_id=current_user.id, product_id=product_id, quantity=quantity)
-            db.session.add(cart_item)
+    # Update Server Cart
+    session['cart'] = cart
 
-        db.session.commit()
-        flash('Item added to cart.', 'success')
+    # Output completion message
+    flash(f'Book{"s" if quantity > 1 else ""} Added To Cart!', 'success')
+    return redirect(url_for('views.home'))
 
-    return redirect(url_for('home'))
 
 @purchase.route('/remove_from_cart', methods=['POST'])
 @login_required
