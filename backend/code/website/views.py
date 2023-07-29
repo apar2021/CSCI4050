@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template
 from flask_login import login_required
 from .models import Book
+from .forms import BookThumbnailForm
 import random
 views = Blueprint('views', __name__)
 
@@ -20,9 +21,10 @@ def home():
     # Get the 4 most recent books added to the database, reverse the list
     new_books = all_books[::-1][:4]
 
+    form = BookThumbnailForm()
 
     # Pass the random_books to the front page (home.html) template
-    return render_template('home.html', featured_books=random_books, new_books=new_books)
+    return render_template('home.html', featured_books=random_books, new_books=new_books, form = form)
 
 
 @views.route('/cart')

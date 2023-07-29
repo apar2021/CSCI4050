@@ -7,14 +7,16 @@ from flask_login import current_user, login_required
 
 purchase = Blueprint('purchase', __name__)
 
-@purchase.route('/add_to_cart/<int:book_id>', methods=['POST', 'GET'])
+@purchase.route('/', methods=['POST', 'GET'])
 @login_required
 def add_to_cart(book_id, quantity=1):
+    print("Started")
     # Check if the book exists
     #book_id = request.form.get('book_id') # TEMPORARY
     form = BookThumbnailForm()
     if form.validate_on_submit():
         book = Book.query.get(book_id)
+        print("validated")
         if not book:
             flash('Book not found.', 'error')
             return redirect(url_for('views.home'))
@@ -36,6 +38,12 @@ def add_to_cart(book_id, quantity=1):
         # Output completion message
         flash(f'Book{"s" if quantity > 1 else ""} Added To Cart!', 'success')
         return redirect(url_for('views.home'))
+    else:
+        # Outputting Errors
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
+    print("failed")
+    print(form.errors)
     return render_template('Home.html', form = form)
 
 
