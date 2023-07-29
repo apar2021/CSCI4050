@@ -51,6 +51,24 @@
         p {
             margin: 0;
         }
+        
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .button-container a {
+            display: inline-block;
+            background-color: #8A584C; /* Updated color */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+        
+        .button-container a:hover {
+            background-color: #70463e; /* Updated color */
+        }
     </style>
 </head>
 <body>
@@ -72,6 +90,7 @@
             <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
             <li><a href="{{ url_for('auth.login') }}">Login</a></li>
         {% endif %}
+    </ul>
 
     <h1>Email Verification Sent</h1>
 
