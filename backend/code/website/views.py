@@ -59,6 +59,12 @@ def checkout():
 
     return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total)
 
+# Product page
+@views.route('/product/<int:book_id>')
+def product(book_id):
+    book = Book.query.get_or_404(book_id)
+    return render_template('Product.html', book=book)
+
 
 # Order History page
 @views.route('/order-history')

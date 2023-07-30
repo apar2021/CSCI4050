@@ -239,7 +239,7 @@
     {% for book in featured_books %}
     <div class="product-card">
         <img src="{{ book.image_url }}" alt="" />
-        <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
+        <h2><a href="{{ url_for('views.product', book_id=book.id) }}">{{ book.title }}</a></h2>
         <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
         <form action="{{ url_for('purchase.add_to_cart', book_id=book.id) }}" method="POST">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -254,7 +254,7 @@
     {% for book in new_books %}
     <div class="product-card">
         <img src="{{ book.image_url }}" alt="" />
-        <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
+        <h2><a href="{{ url_for('views.product', book_id=book.id) }}">{{ book.title }}</a></h2>
         <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
         <form action="{{ url_for('purchase.add_to_cart', book_id=book.id) }}" method="POST">
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
