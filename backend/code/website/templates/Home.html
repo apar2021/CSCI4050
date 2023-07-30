@@ -222,6 +222,18 @@
 
   <h1>Home</h1>
 
+  {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+  {% endwith %}
+
   <section class="product-cards">
     <h2>Featured Books<br></h2>
     {% for book in featured_books %}
@@ -240,12 +252,15 @@
   <section class="product-cards">
     <h2>New Additions<br></h2>
     {% for book in new_books %}
-        <div class="product-card">
-          <img src="{{ book.image_url }}" alt="" />
-          <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
-          <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
-          <button class="add-to-cart">Add to Cart</button>
-        </div>
+    <div class="product-card">
+        <img src="{{ book.image_url }}" alt="" />
+        <h2><a href="{{ url_for('views.home', book_id=book.id) }}">{{ book.title }}</a></h2>
+        <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
+        <form action="{{ url_for('purchase.add_to_cart', book_id=book.id) }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="add-to-cart" type="submit">Add to Cart</button>
+        </form>
+    </div>
     {% endfor %}
   </section>
 </body>
