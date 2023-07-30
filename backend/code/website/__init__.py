@@ -34,11 +34,13 @@ def create_app():
     from .auth import auth
     from .admin import admin
     from .purchase import purchase
+    from .search import search
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth)
     app.register_blueprint(admin)
     app.register_blueprint(purchase)
+    app.register_blueprint(search)
     
 
     from .models import User
