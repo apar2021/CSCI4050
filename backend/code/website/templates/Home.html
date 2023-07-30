@@ -207,7 +207,7 @@
         <li><a href="{{ url_for('auth.login') }}">Login</a></li>
     {% endif %}
     <li class="search-form">
-      <form id="search-form" action="/search" method="GET">
+      <form id="search-form" action="{{ url_for('search.lookup') }}" method="GET">
         <input type="text" id="search-input" name="query" placeholder="Search..." required>
         <select id="search-criteria" name="criteria">
           <option value="title">Search by Title</option>
@@ -218,7 +218,6 @@
         <button type="submit">Search</button>
       </form>
     </li>
-  </ul>
 
   <h1>Home</h1>
 

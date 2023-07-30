@@ -3,7 +3,8 @@ from .models import Book
 
 search = Blueprint('search', __name__)
 
-def search():
+@search.route('/search', methods = ['GET'] )
+def lookup():
     query = request.args.get('query')
     criteria = request.args.get('criteria')
 
@@ -20,4 +21,5 @@ def search():
         # Handle other search criteria if needed
         books = []
 
-    return render_template('search_results.html', books=books)
+    print(books[0].title)
+    return render_template('Home.html', books=books)
