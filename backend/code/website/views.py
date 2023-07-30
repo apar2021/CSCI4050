@@ -9,6 +9,7 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @views.route('/home')
 def home():
+    random.seed(42)
     # Fetch all books from the database
     all_books = Book.query.all()
     # Select a random subset of books to display on the front page
