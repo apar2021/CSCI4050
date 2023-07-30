@@ -49,10 +49,16 @@ class User(db.Model, UserMixin):
     encryption_key = Fernet.generate_key()
     encryptor = Fernet(encryption_key)
 
+    is_suspended = db.Column(db.Boolean, default=False)
+
+    
+    cart = db.relationship("Cart", backref="user", uselist=False)
+
+
     def __init__(self, name, phone, email, password, 
                  street="", city="", state="", country="", zipcode=None, 
                  card_type="", card_number=None, expiration_date="", security_code=None,
-                 reset_token=None, reset_token_expiration=None, is_admin=False):
+                 reset_token=None, reset_token_expiration=None, is_admin=False, is_suspend=False):
         self.name = name
         self.phone = phone
         self.email = email
@@ -67,6 +73,7 @@ class User(db.Model, UserMixin):
         self.reset_token = reset_token
         self.reset_token_expiration = reset_token_expiration
         self.is_admin = is_admin
+        self.is_suspended = is_suspend
 
         if card_number:
             self.card_number_encrypted = self.encrypt(str(card_number))
@@ -91,6 +98,7 @@ class User(db.Model, UserMixin):
     def decrypt_security_code(self):
         if self.security_code_encrypted:
             return User.encryptor.decrypt(self.security_code_encrypted.encode()).decode()
+        
 # Table containing Book Information
 class Book(db.Model, UserMixin):
     __tablename__="books"
