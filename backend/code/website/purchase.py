@@ -38,9 +38,9 @@ def remove_from_cart(book_id):
         flash('The book has been removed from your cart.', 'success')
     return redirect(url_for('views.cart'))
   
-@purchase.route('/checkout', methods=['POST'])
+@purchase.route('/checkout_cart', methods=['POST'])
 @login_required
-def checkout():
+def checkout_cart():
     return None
 
 @purchase.route('/orders')

@@ -5,7 +5,7 @@ from .forms import BookThumbnailForm
 import random
 views = Blueprint('views', __name__)
 
-
+# Home page
 @views.route('/')
 @views.route('/home')
 def home():
@@ -27,7 +27,7 @@ def home():
     # Pass the random_books to the front page (home.html) template
     return render_template('home.html', featured_books=random_books, new_books=new_books, form = form)
 
-
+# Cart page
 @views.route('/cart')
 @login_required
 def cart():
@@ -43,12 +43,29 @@ def cart():
     return render_template('Cart.html', books=books, quantities=quantities, zip=zip)
 
 
+# Checkout page
+@views.route('/checkout')
+@login_required
+def checkout():
+    cart = session.get('cart', {})
+    books = []
+    quantities = []
+    total = 0.0
+    for book_id, quantity in zip(cart.keys(), cart.values()):
+        book = Book.query.get_or_404(book_id)
+        books.append(book)
+        quantities.append(quantity)
+        total += book.selling_price * quantity
+
+    return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total)
+
+
+# Order History page
 @views.route('/order-history')
 def order_history():
     return render_template('OrderHistory.html')
 
+# Admin Panel
 @views.route('/admin-page')
 def admin_page():
     return render_template('AdminPage.html')
-
-
