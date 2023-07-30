@@ -27,15 +27,16 @@ def add_to_cart(book_id, quantity=1):
     return redirect(url_for('views.home'))
 
 
-@purchase.route('/remove_from_cart', methods=['POST'])
+@purchase.route('/remove_from_cart/<int:book_id>', methods=['POST'])
 @login_required
-def remove_from_cart():
-    return None
-
-@purchase.route('/cart')
-@login_required
-def cart():
-    return None
+def remove_from_cart(book_id):
+    cart = session.get('cart', {})
+    book_id = str(book_id)
+    if book_id in cart:
+        del cart[book_id]
+        session['cart'] = cart
+        flash('The book has been removed from your cart.', 'success')
+    return redirect(url_for('views.cart'))
   
 @purchase.route('/checkout', methods=['POST'])
 @login_required

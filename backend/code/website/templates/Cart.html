@@ -134,20 +134,26 @@
   <h1>Cart</h1>
 
   <div class="cart-item">
+    {% for book, quantity in zip(books, quantities) %}
     <div class="cart-item-details">
-      <h3>The Great Gatsby</h3>
-      <p>Author: F. Scott Fitzgerald</p>
-      <p>Price: $10.99</p>
+      <h3>{{ book.title}}</h3>
+      <p>Author: {{ book.author}}</p>
+      <p>Price: ${{ book.selling_price }}</p>
     </div>
     
     <label for="quantity">Quantity:</label>
-    <input class="quantity-input" type="number" id="quantity" value="1" min="1">
+    <input class="quantity-input" type="number" id="quantity" value="{{quantity}}">
     
-    <button class="remove-button">Remove from Cart</button>
+
+    <form action="{{ url_for('purchase.remove_from_cart', book_id=book.id) }}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="remove-from-cart" type="submit">Remove from Cart</button>
+    </form>
+    {% endfor %}
   </div>
 
   <!-- Add more cart items if necessary -->
-
+    
     <button class="checkout-button"><a href="Checkout.html" style="color: white; text-decoration: none;">Proceed to Checkout</a></button>
 </body>
 </html>

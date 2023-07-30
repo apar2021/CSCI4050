@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, session
 from flask_login import login_required
 from .models import Book
 import random
@@ -28,7 +28,16 @@ def home():
 @views.route('/cart')
 @login_required
 def cart():
-    return render_template('Cart.html')
+    # Get the session cart or create a new one if it doesn't exist
+    cart = session.get('cart', {})
+    books = []
+    quantities = []
+    for book_id, quantity in zip(cart.keys(), cart.values()):
+        book = Book.query.get_or_404(book_id)
+        books.append(book)
+        quantities.append(quantity)
+
+    return render_template('Cart.html', books=books, quantities=quantities, zip=zip)
 
 
 @views.route('/order-history')
