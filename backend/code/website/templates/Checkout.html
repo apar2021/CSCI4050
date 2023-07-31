@@ -81,14 +81,14 @@
           <legend>Credit Card Information</legend>
 
           <label for="card_number">Credit Card Number:</label>
-          <input type="text" id="card_number" name="card_number">
+          <input type="text" id="card_number" name="card_number" required>
 
           <label for="expiration_date">Expiration Date:</label>
-          <input autocomplete="off" name="expiration_date_m" class="exp" id="month" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="MM" type="text" data-pattern-validate />
-          <input autocomplete="off" name="expiration_date_Y" class="exp" id="year" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="YY" type="text" data-pattern-validate />
+          <input autocomplete="off" name="expiration_date_m" class="exp" id="month" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="MM" type="text" data-pattern-validate required />
+          <input autocomplete="off" name="expiration_date_Y" class="exp" id="year" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="YY" type="text" data-pattern-validate required />
 
           <label for="security_code">Security Code:</label>
-          <input type="text" id="security_code" name="security_code">
+          <input type="text" id="security_code" name="security_code" required>
           <div>
           <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
           <label for="vehicle1"> Save Card Information for Future Purchases? </label><br>
