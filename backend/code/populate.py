@@ -40,20 +40,4 @@ with sql.connect(db_path) as con:
     con.commit()
 
 
-# # Insert each row of the dataframe into the database located at db_path
-# with sql.connect(db_path) as con:
-#     # Iterate through each row of the dataframe
-#     for row in [df]:
-#         # Create a cursor object
-#         cur = con.cursor()
-#         # Execute the SQL query
-#         cur.execute(f"""
-#                     INSERT INTO books ({row['isbn10'].values[0]}, {row['title'].values[0]}, {row['authors'].values[0]}, {row['edition'].values[0]}, {row['categories'].values[0]},
-#                     {row['publisher'].values[0]}, {row['published_year'].values[0]}, {row['thumbnail'].values[0]}, {row['quantity'].values[0]}, {row['status'].values[0]},
-#                     {row['selling_price'].values[0]}, {row['buying_price'].values[0]}, {row['min_threshold'].values[0]}
-#         """)
-#         # Commit the changes to the database
-#         con.commit()
-
-
 
