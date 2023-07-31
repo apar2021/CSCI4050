@@ -252,12 +252,23 @@ def edit_profile():
         return render_template('EditProfile.html', form=form)
 
 # #way to search given criteria - not an advisable option in this case
-# @auth.route('/search')
+# @auth.route('/search',methods=["GET"])
 # def search():
-#     query=request.args.get('query')
-#     criteria=request.args.get('criteria')
-#     if criteria=="title":
-#         books=Book.query.filter(Book.title.
+    query = request.args.get('query')
+    criteria = request.args.get('criteria')
+
+    # Perform search based on the chosen criteria
+    if criteria == 'title':
+        books = Book.query.filter(Book.title.ilike(f"%{query}%")).all()
+    elif criteria == 'author':
+        books = Book.query.filter(Book.author.ilike(f"%{query}%")).all()
+    elif criteria == 'isbn':
+        books = Book.query.filter(Book.isbn == query).all()
+    # Add more conditions for other search criteria as needed
+
+    return render_template('search_results.html', books=books)
+    # not an ideal way to proceed in this case
+    # keep this in mind 
 # @auth.route('/search')
 # def search(): 
 #       form = SearchForm()
