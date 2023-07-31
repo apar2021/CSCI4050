@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5EACF;
+            color: #4F583D;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        ul.horizontal-menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #8A584C; /* Updated color */
+        }
+
+        ul.horizontal-menu li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        ul.horizontal-menu li a {
+            display: block;
+            color: #fff; /* Updated color */
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.horizontal-menu li a:hover {
+            background-color: #70463e; /* Updated color */
+        }
+        
+        .message {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <ul class="horizontal-menu">
+        <li><a href="{{ url_for('views.home') }}">Home</a></li>
+        <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+        {% if current_user.is_authenticated %}
+            {% if current_user.is_admin %}
+                <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+                <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+                <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+            {% else %}
+                <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+                <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+                <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+        {% else %}
+            <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+            <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+        {% endif %}
+    </ul>
+
+    <h1>Order Confirmation</h1>
+
+    <div class="message">
+        <p>An order confirmation email has been sent to your registered email address.</p>
+        <p>Here is your confirmation code: .</p>
+    </div>
+</body>
+</html>
