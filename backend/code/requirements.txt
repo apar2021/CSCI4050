@@ -8,3 +8,4 @@ email-validator
 selenium
 cryptography.fernet
 secrets
+pandas
