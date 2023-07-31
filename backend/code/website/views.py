@@ -61,7 +61,6 @@ def checkout():
         
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
-    print("ALERT ALERT ALERT")
     return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total, form=form)
 
 # Product page

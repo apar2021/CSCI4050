@@ -96,7 +96,7 @@
         </fieldset>
         {{ form.csrf_token }}
       </form>
-      <form action="{{ url_for('purchase.checkout_cart') }}" method="POST">
+      <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <button class="checkout-cart" type="submit">Complete Order</button>
       </form>
