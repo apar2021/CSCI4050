@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,46 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    .horizontal-menu {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+    .horizontal-menu li {
+      float: left;
+    }
+    .horizontal-menu li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+    .horizontal-menu li a:hover {
+      background-color: #111;
     }
     .checkout-container {
-      width: 70%;
+      max-width: 800px;
       margin: auto;
       padding: 20px;
-      border: 1px solid #ccc;
       border-radius: 4px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      background-color: #fff;
+      margin-top: 2rem;
+      margin-bottom: 2rem;
     }
     .checkout-item {
       display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
+      flex-direction: column;
+      align-items: start;
+      border-bottom: 1px solid #ccc;
+      padding: 1rem 0;
     }
     .checkout-summary {
       text-align: right;
@@ -33,6 +61,8 @@
       color: white;
       border-radius: 4px;
       cursor: pointer;
+      margin-top: 1rem;
+      width: 100%;
     }
     button:hover {
       background-color: #0056b3;
@@ -40,7 +70,8 @@
   </style>
 </head>
 
-<ul class="horizontal-menu">
+<body>
+  <ul class="horizontal-menu">
     <li><a href="{{ url_for('views.home') }}">Home</a></li>
     <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
     {% if current_user.is_authenticated %}
@@ -58,24 +89,21 @@
         <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
         <li><a href="{{ url_for('auth.login') }}">Login</a></li>
     {% endif %}
-</ul>
+  </ul>
 
-<body>
-  <h2>Checkout</h2>
-  <div class="checkout-container">
+  <section class="checkout-container">
+    <h2>Checkout</h2>
     {% for book, quantity in zip(books, quantities) %}
     <div class="checkout-item">
       <h3>{{ book.title}}</h3>
       <p>Author: {{ book.author}}</p>
       <p>Price: ${{ book.selling_price }}</p>
+      <p>Quantity: {{ quantity }}</p>
     </div>
-    
-    <label for="quantity">Quantity: {{ quantity }}</label>
-    
     {% endfor %}
     
     <div class="checkout-summary">
-      <div>Total: ${{ total }}</div>
+      <p>Total: ${{ total }}</p>
       <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="post">
         <fieldset>
           <legend>Credit Card Information</legend>
@@ -89,18 +117,19 @@
 
           <label for="security_code">Security Code:</label>
           <input type="text" id="security_code" name="security_code" required>
+
           <div>
-          <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-          <label for="vehicle1"> Save Card Information for Future Purchases? </label><br>
+          <input type="checkbox" id="save_card" name="save_card" value="save_card">
+          <label for="save_card"> Save Card Information for Future Purchases?</label>
           </div>
+
         </fieldset>
         {{ form.csrf_token }}
-      </form>
-      <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-          <button class="checkout-cart" type="submit">Complete Order</button>
+        <button class="checkout-cart" type="submit">Complete Order</button>
       </form>
     </div>
-  </div>
+  </section>
+
 </body>
 </html>
+
