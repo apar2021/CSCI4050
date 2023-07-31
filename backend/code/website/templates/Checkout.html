@@ -67,6 +67,32 @@
     button:hover {
       background-color: #0056b3;
     }
+    
+   ul.horizontal-menu {
+      list-style-type: none;
+      margin: 0;
+      padding: 10px 0;
+      overflow: hidden;
+      background-color: #8A584C;
+    }
+
+    ul.horizontal-menu li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    ul.horizontal-menu li a {
+      display: block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    ul.horizontal-menu li a:hover {
+      background-color: #70463e;
+    }
   </style>
 </head>
 
@@ -75,24 +101,24 @@
     <li><a href="{{ url_for('views.home') }}">Home</a></li>
     <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
     {% if current_user.is_authenticated %}
-        {% if current_user.is_admin %}
-            <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
-            <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
-            <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
-        {% else %}
-            <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
-            <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
-            <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
-        {% endif %}
-        <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% if current_user.is_admin %}
+    <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+    <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+    <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
     {% else %}
-        <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
-        <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+    <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+    <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+    <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+    {% endif %}
+    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+    <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
     {% endif %}
   </ul>
 
-  <section class="checkout-container">
-    <h2>Checkout</h2>
+  <h2>Checkout</h2>
+  <div class="checkout-container">
     {% for book, quantity in zip(books, quantities) %}
     <div class="checkout-item">
       <h3>{{ book.title}}</h3>
@@ -100,8 +126,11 @@
       <p>Price: ${{ book.selling_price }}</p>
       <p>Quantity: {{ quantity }}</p>
     </div>
+
+    <label for="quantity">Quantity: {{ quantity }}</label>
+
     {% endfor %}
-    
+
     <div class="checkout-summary">
       <p>Total: ${{ total }}</p>
       <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="post">
@@ -131,5 +160,6 @@
   </section>
 
 </body>
+
 </html>
 
