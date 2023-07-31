@@ -259,6 +259,8 @@ def edit_profile():
 #     if criteria=="title":
 #         books=Book.query.filter(Book.title.
 # @auth.route('/search')
-# def search():
+# def search(): 
+       form = SearchForm()
+       
                                 
             
