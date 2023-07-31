@@ -2,7 +2,7 @@ from flask import Blueprint, flash, redirect, url_for, session
 from flask_login import current_user, login_required
 from .models import Book, CartItem, Cart, Order
 from . import db
-import datetime
+from datetime import datetime
 
 purchase = Blueprint('purchase', __name__)
 
@@ -42,9 +42,9 @@ def remove_from_cart(book_id):
 @purchase.route('/checkout_cart', methods=['POST'])
 @login_required
 def checkout_cart():
-    cart = session.get('cart', {})
+    cart_session = session.get('cart', {})
     total = session.get('total', 0.00)
-    if len(cart) == 0:
+    if len(cart_session) == 0:
         flash('Your cart is empty.', 'error')
         return redirect(url_for('views.home'))
     
@@ -54,7 +54,7 @@ def checkout_cart():
     db.session.commit()
 
     # Update Book Quantities
-    for book_id, quantity in zip(cart.keys(), cart.values()):
+    for book_id, quantity in zip(cart_session.keys(), cart_session.values()):
         book = Book.query.get_or_404(book_id)
         if book.quantity < quantity:
             flash(f'Not enough stock available for {book.title}.', 'error')
@@ -69,6 +69,8 @@ def checkout_cart():
     order = Order(userid=current_user.id, cartid=cart.id, card_number=current_user.card_number_encrypted, total_price=total, promotionid=None, order_date=datetime.now())
     db.session.add(order)
     db.session.commit()
+    # Clear the session cart
+    session['cart'] = {}
     return redirect(url_for('views.home'))
 
 @purchase.route('/orders')
