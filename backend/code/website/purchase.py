@@ -41,7 +41,7 @@ def remove_from_cart(book_id):
   
 @purchase.route('/checkout_cart', methods=['POST'])
 @login_required
-def checkout_cart():
+def checkout_cart(form):
     cart_session = session.get('cart', {})
     total = session.get('total', 0.00)
     if len(cart_session) == 0:
@@ -65,6 +65,9 @@ def checkout_cart():
         db.session.add(cart_item)
         db.session.commit()
     
+    
+
+
     # Create an order instance for the cart
     order = Order(userid=current_user.id, cartid=cart.id, card_number=current_user.card_number_encrypted, total_price=total, promotionid=None, order_date=datetime.now())
     db.session.add(order)

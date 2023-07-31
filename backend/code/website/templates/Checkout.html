@@ -73,9 +73,29 @@
     <label for="quantity">Quantity: {{ quantity }}</label>
     
     {% endfor %}
-
+    
     <div class="checkout-summary">
       <div>Total: ${{ total }}</div>
+      <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="post">
+        <fieldset>
+          <legend>Credit Card Information</legend>
+
+          <label for="card_number">Credit Card Number:</label>
+          <input type="text" id="card_number" name="card_number">
+
+          <label for="expiration_date">Expiration Date:</label>
+          <input autocomplete="off" name="expiration_date_m" class="exp" id="month" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="MM" type="text" data-pattern-validate />
+          <input autocomplete="off" name="expiration_date_Y" class="exp" id="year" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="YY" type="text" data-pattern-validate />
+
+          <label for="security_code">Security Code:</label>
+          <input type="text" id="security_code" name="security_code">
+          <div>
+          <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+          <label for="vehicle1"> Save Card Information for Future Purchases? </label><br>
+          </div>
+        </fieldset>
+        {{ form.csrf_token }}
+      </form>
       <form action="{{ url_for('purchase.checkout_cart') }}" method="POST">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <button class="checkout-cart" type="submit">Complete Order</button>

@@ -260,7 +260,7 @@ def edit_profile():
 #         books=Book.query.filter(Book.title.
 # @auth.route('/search')
 # def search(): 
-       form = SearchForm()
+#       form = SearchForm()
        
                                 
             

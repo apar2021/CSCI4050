@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, PasswordField, SubmitField, DecimalField, DateField
+from wtforms import StringField, IntegerField, PasswordField, SubmitField, DecimalField, DateField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, URL, EqualTo, Optional
 
 class RegistrationForm(FlaskForm):
@@ -64,6 +64,9 @@ class PromoCodeForm(FlaskForm):
     expiration_date = DateField('Expiration Date:', format='%Y-%m-%d', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-class BookThumbnailForm(FlaskForm):
-    book_id = IntegerField('Book ID:', validators=[DataRequired()])
-    submit = SubmitField('Add to Cart')
+class PaymentForm(FlaskForm):
+    card_number = IntegerField('Card Number:', validators=[DataRequired()])
+    expiration_date_m = IntegerField('Expiration Date:', validators=[DataRequired(), Length(2, 2)])
+    expiration_date_Y = IntegerField('Expiration Date:', validators=[DataRequired(), Length(2, 2)])
+    security_code = IntegerField('Security Code:', validators=[DataRequired()])
+    remember_card = BooleanField('Remember Card', validators=[Optional()])

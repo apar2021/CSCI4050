@@ -1,8 +1,8 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, redirect, url_for, flash
 from flask_login import login_required
 from .models import Book
-from .forms import BookThumbnailForm
 import random
+from .forms import PaymentForm
 views = Blueprint('views', __name__)
 
 # Home page
@@ -22,10 +22,8 @@ def home():
     # Get the 4 most recent books added to the database, reverse the list
     new_books = all_books[::-1][:4]
 
-    form = BookThumbnailForm()
-
     # Pass the random_books to the front page (home.html) template
-    return render_template('home.html', featured_books=random_books, new_books=new_books, form = form)
+    return render_template('home.html', featured_books=random_books, new_books=new_books)
 
 # Cart page
 @views.route('/cart')
@@ -44,7 +42,7 @@ def cart():
 
 
 # Checkout page
-@views.route('/checkout')
+@views.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout():
     cart = session.get('cart', {})
@@ -57,7 +55,14 @@ def checkout():
         quantities.append(quantity)
         total += book.selling_price * quantity
     session["total"] = total
-    return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total)
+    form = PaymentForm()
+    if form.validate_on_submit():
+        # Outputting Errors
+        
+        for error, message in zip(form.errors.keys(), form.errors.values()):
+            flash(f'{error.capitalize()} Error: {message[0]}')
+    print("ALERT ALERT ALERT")
+    return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total, form=form)
 
 # Product page
 @views.route('/product/<int:book_id>')
