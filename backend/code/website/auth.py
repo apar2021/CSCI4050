@@ -249,5 +249,11 @@ def edit_profile():
         # Outputting Errors
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
+@auth.route('/search')
+def search():
+    query=request.args.get('query')
+    criteria=request.args.get('criteria')
+    if criteria=="title":
+        books=Book.query.filter(Book.title.
 
     return render_template('EditProfile.html', form=form)
