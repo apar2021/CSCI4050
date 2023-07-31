@@ -1,1 +1,8 @@
 {% extends 'home.html'%}
+{% block content %}
+<h2> You searched For: <em>{{searched}}</em></h2>
+
+{% else %}
+Sorry your search term: <strong>{{searched}}</strong> was not found...
+{% endif %}
+{% endblock %}
