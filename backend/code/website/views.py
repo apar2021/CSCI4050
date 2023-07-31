@@ -56,7 +56,7 @@ def checkout():
         books.append(book)
         quantities.append(quantity)
         total += book.selling_price * quantity
-
+    session["total"] = total
     return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total)
 
 # Product page

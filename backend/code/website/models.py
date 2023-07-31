@@ -52,7 +52,7 @@ class User(db.Model, UserMixin):
     is_suspended = db.Column(db.Boolean, default=False)
 
     
-    cart = db.relationship("Cart", backref="user", uselist=False)
+    #cart = db.relationship("Cart", backref="user", uselist=False)
 
 
     def __init__(self, name, phone, email, password, 
@@ -113,7 +113,6 @@ class Book(db.Model, UserMixin):
     edition = db.Column(db.String(50))
     category = db.Column(db.String(100))
     publisher = db.Column(db.String(150))
-    publication_year = db.Column(db.Integer)
     publication_year = db.Column(db.Integer)
     image_url = db.Column(db.String(300))
     quantity = db.Column(db.Integer)
@@ -204,19 +203,19 @@ class Order(db.Model, UserMixin):
     # primary key
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('users.id'))
-    transactionid = db.Column(db.Integer, db.ForeignKey('transaction.id'))
+    cartid = db.Column(db.Integer, db.ForeignKey('cart.id'))
     # Todo: Change to cardid
-    card_number = db.Column(db.Integer, db.ForeignKey('users.card_number_encrypted'))
+    card_number = db.Column(db.Integer)
     #cardid = db.Column(db.Integer, db.ForeignKey('card.id'))
     # The total price is the price of the transaction times its quanitity
     total_price = db.Column(db.Float)
     promotionid = db.Column(db.Integer, db.ForeignKey('promotion.id'))
     order_date = db.Column(db.DateTime)
 
-    def __init__(self, userid, transactionid, cardid, total_price, promotionid, order_date):
+    def __init__(self, userid, cartid, card_number, total_price, promotionid, order_date):
         self.userid = userid
-        self.transactionid = transactionid
-        self.cardid = cardid
+        self.cartid = cartid
+        self.card_number = card_number
         self.total_price = total_price
         self.promotionid = promotionid
         self.order_date = order_date
