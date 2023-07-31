@@ -250,14 +250,15 @@ def edit_profile():
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
         return render_template('EditProfile.html', form=form)
-#way to search given criteria - not an advisable option in this case
-@auth.route('/search')
-def search():
-    query=request.args.get('query')
-    criteria=request.args.get('criteria')
-    if criteria=="title":
-        books=Book.query.filter(Book.title.
-@auth.route('/search')
-def search():
+
+# #way to search given criteria - not an advisable option in this case
+# @auth.route('/search')
+# def search():
+#     query=request.args.get('query')
+#     criteria=request.args.get('criteria')
+#     if criteria=="title":
+#         books=Book.query.filter(Book.title.
+# @auth.route('/search')
+# def search():
                                 
             
