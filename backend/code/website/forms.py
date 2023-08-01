@@ -16,7 +16,7 @@ class RegistrationForm(FlaskForm):
     zipcode = IntegerField('Zip Code', validators=[Optional()])  # Make sure to match the field name with your User model
 
     card_type = StringField('Card Type', validators=[Optional()])
-    card_number = IntegerField('Credit Card Number', validators=[Optional()])
+    card_number = StringField('Credit Card Number', validators=[Optional()])
     expiration_date = StringField('Expiration Date', validators=[Optional()]) 
     security_code = PasswordField('Security Code', validators=[Optional()])
 

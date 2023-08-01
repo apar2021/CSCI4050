@@ -205,9 +205,9 @@ def edit_profile():
         form.street.data = current_user.street
         form.city.data = current_user.city
         form.state.data = current_user.state
-        form.zipcode.data = current_user.zipcode
+        #form.zipcode.data = current_user.zipcode
 
-        form.card_type.data = current_user.card_type
+        #form.card_type.data = current_user.card_type
         #form.card_number.data = current_user.decrypt_card_number()
         form.expiration_date.data = current_user.expiration_date
         #form.security_code.data = current_user.decrypt_security_code()
