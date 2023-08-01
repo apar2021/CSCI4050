@@ -57,11 +57,6 @@ def checkout():
         total += book.selling_price * quantity
     session["total"] = total
 
-    if request.method == 'GET':
-        form.card_number.data = current_user.decrypt_card_number()
-        form.expiration_date.data = current_user.expiration_date
-        form.security_code.data = current_user.decrypt_security_code()
-
 
     if form.validate_on_submit():
         session["card_number"] = form.card_number.data

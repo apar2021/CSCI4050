@@ -139,11 +139,11 @@
             <legend>Credit Card Information</legend>
     
             <label for="card_number">Credit Card Number:</label>
-            <input type="text" id="card_number" name="card_number" value="{{ form.card_number.data }}" required>
+            <input type="text" id="card_number" name="card_number" required>
     
             <label for="expiration_date">Expiration Date:</label>
-            <input type="text" id="expiration_date_m" name="expiration_date_m" required maxlength="2" pattern="\d{2}">
-            <input type="text" id="expiration_date_Y" name="expiration_date_Y" required maxlength="2" pattern="\d{2}">
+            <input type="text" id="expiration_date_m" name="expiration_date_m" required maxlength="2" pattern="\d{2}" required>
+            <input type="text" id="expiration_date_Y" name="expiration_date_Y" required maxlength="2" pattern="\d{2}" required>
     
             <label for="security_code">Security Code:</label>
             <input type="text" id="security_code" name="security_code" required>
