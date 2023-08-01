@@ -13,8 +13,8 @@ Our CSCI 4050 Project consists off:
       
 
 ----------------------------------------------------------
-Environment Setup.
+Environment Setup:
 1. Navigate to .\backend\code
 2. Run the command `pip install -r requirement.txt`
 3. If no database exists, build it by running `python ./main.py`
-4. Populate the database by running `python ./populate.py`
+4. Populate a new database by running `python ./populate.py`
