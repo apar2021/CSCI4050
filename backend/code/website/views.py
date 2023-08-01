@@ -59,6 +59,7 @@ def checkout():
 
 
     if form.validate_on_submit():
+        session["promo_code"] = form.promo_code.data
         session["card_number"] = form.card_number.data
         session["expiration_date"] = form.expiration_date_m.data + "/" + form.expiration_date_Y.data
         session["security_code"] = form.security_code.data

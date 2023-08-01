@@ -76,6 +76,7 @@ class PromoCodeForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class PaymentForm(FlaskForm):
+    promo_code = StringField('Promo Code:', validators=[Optional()])
     card_number = StringField('Card Number:', validators=[DataRequired()])
     expiration_date_m = StringField('Expiration Date:', validators=[DataRequired()])
     expiration_date_Y = StringField('Expiration Date:', validators=[DataRequired()])

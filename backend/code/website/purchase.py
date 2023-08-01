@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, url_for, session, request
 from flask_login import current_user, login_required
 from flask_mail import Message
-from .models import Book, CartItem, Cart, Order, User
+from .models import Book, CartItem, Cart, Order, User, Promotion
 from . import db, mail
 from datetime import datetime
 import secrets
@@ -102,12 +102,22 @@ def checkout_cart():
         user.security_code_encrypted = user.encrypt(str(session.get('security_code', None)))
         db.session.commit()
     
-    
-    
+    promo = session.get('promo_code', None)
+    if promo:
+        promo = Promotion.query.filter_by(promo_code=session.get('promo_code')).first()
+        if promo:
+            if promo.start_date <= datetime.now() <= promo.expiration_date:
+                total = total - (total * (promo.percentage * 0.01))
+            else:
+                flash('Promo code is expired.', 'error')
+                return redirect(url_for('views.home'))
+        else:
+            flash('Promo code is invalid.', 'error')
+            return redirect(url_for('views.home'))
 
 
     # Create an order instance for the cart
-    order = Order(userid=current_user.id, cartid=cart.id, card_number=session.get("card_number"), total_price=total, promotionid=None, order_date=datetime.now())
+    order = Order(userid=current_user.id, cartid=cart.id, card_number=session.get("card_number"), total_price=total, promotionid=promo.id, order_date=datetime.now())
     # Encrypt the card number and security code
     if session.get('card_number', None):
         order.card_number = user.encrypt(str(session.get("card_number")))
@@ -121,6 +131,7 @@ def checkout_cart():
     session['expiration_date'] = None
     session['security_code'] = None
     session['save_card'] = False
+    session['promo_code'] = None
 
     send_order_confirmation_email(cart, order)
 
