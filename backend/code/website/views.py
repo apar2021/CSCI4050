@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, url_for, flash, request
 from flask_login import login_required, current_user
-from .models import Book, Order, Cart, CartItem
+from .models import Book, Order, Cart, CartItem, Book
 import random
 from .forms import PaymentForm
 views = Blueprint('views', __name__)
@@ -91,10 +91,19 @@ def order_history():
     print(len(carts))
     # Get all the cart items for the old carts
     cart_items = []
+    book_carts = []
     for cart in carts:
-        cart_items.append(CartItem.query.filter_by(cartid=cart.id).all())
+        print(cart)
+        items = CartItem.query.filter_by(cartid=cart.id).all()
+        books = []
+        for item in items:
+            books.append(Book.query.get(item.bookid))
+        print(items)
+        print(books)
+        cart_items.append(items)
+        book_carts.append(books)
 
-    return render_template('OrderHistory.html', orders=orders, cart_items=cart_items, zip=zip)
+    return render_template('OrderHistory.html', orders=orders, cart_items=cart_items, book_carts=book_carts, zip=zip)
 
 # Admin Panel
 @views.route('/admin-page')
