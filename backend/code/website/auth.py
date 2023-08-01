@@ -269,9 +269,5 @@ def edit_profile():
     return render_template('search_results.html', books=books)
     # not an ideal way to proceed in this case
     # keep this in mind 
-# @auth.route('/search')
-# def search(): 
-#       form = SearchForm()
-       
                                 
             
