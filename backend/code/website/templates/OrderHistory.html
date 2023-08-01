@@ -144,6 +144,7 @@
                     <th>Book Title</th>
                     <th>Author(s)</th>
                     <th>Price</th>
+                    <th>Quantity</th>
                 </tr>
             </thead>
             {% for item, book in zip(cart, book_cart) %}
@@ -152,6 +153,7 @@
                     <td>{{book.title}}</td>
                     <td>{{book.author}}</td>
                     <td>${{book.selling_price}}</td>
+                    <td>{{item.quantity}}</td>
                 </tr>
             </tbody>
             {% endfor %}
