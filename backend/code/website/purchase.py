@@ -1,7 +1,8 @@
 from flask import Blueprint, flash, redirect, url_for, session
 from flask_login import current_user, login_required
-from .models import Book, CartItem, Cart, Order
-from . import db
+from flask_mail import Message
+from .models import Book, CartItem, Cart, Order, User
+from . import db, mail
 from datetime import datetime
 
 purchase = Blueprint('purchase', __name__)
@@ -39,9 +40,9 @@ def remove_from_cart(book_id):
         flash('The book has been removed from your cart.', 'success')
     return redirect(url_for('views.cart'))
   
-@purchase.route('/checkout_cart', methods=['POST'])
+@purchase.route('/checkout_cart', methods=['GET', 'POST'])
 @login_required
-def checkout_cart(form):
+def checkout_cart():
     cart_session = session.get('cart', {})
     total = session.get('total', 0.00)
     if len(cart_session) == 0:
@@ -65,15 +66,41 @@ def checkout_cart(form):
         db.session.add(cart_item)
         db.session.commit()
     
+    # Get current user
+    user = User.query.get(current_user.id)
+
+    if session.get('save_card', False):
+        user.card_number_encrypted = user.encrypt(str(session.get('card_number', None)))
+        user.expiration_date = session.get('expiration_date', None)
+        user.security_code_encrypted = user.encrypt(str(session.get('security_code', None)))
+        db.session.commit()
+    
+    
     
 
 
     # Create an order instance for the cart
-    order = Order(userid=current_user.id, cartid=cart.id, card_number=current_user.card_number_encrypted, total_price=total, promotionid=None, order_date=datetime.now())
+    order = Order(userid=current_user.id, cartid=cart.id, card_number=session.get("card_number"), total_price=total, promotionid=None, order_date=datetime.now())
+    # Encrypt the card number and security code
+    if session.get('card_number', None):
+        order.card_number = user.encrypt(str(session.get("card_number")))
+
     db.session.add(order)
     db.session.commit()
-    # Clear the session cart
+    # Clear the session variables
     session['cart'] = {}
+    session['total'] = 0.00
+    session['card_number'] = None
+    session['expiration_date'] = None
+    session['security_code'] = None
+    session['save_card'] = False
+
+    # Generate a confirmation code
+    # Send the verification email
+    msg = Message('Account Verification', sender='your_gmail_username', recipients=[current_user.email])
+    msg.body = f'You Ordered!'
+    mail.send(msg)
+
     return redirect(url_for('views.home'))
 
 @purchase.route('/orders')

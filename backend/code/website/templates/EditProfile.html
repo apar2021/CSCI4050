@@ -116,7 +116,7 @@
     <h1>Edit Profile</h1>
 
     <form method="post" action="{{ url_for('auth.edit_profile') }}">
-        {{ form.csrf_token }}
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <fieldset>
             <div class="section">
                 <legend>Information</legend>

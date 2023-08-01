@@ -10,6 +10,17 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
+    # street = StringField('Street')
+    # city = StringField('City')
+    # state = StringField('State')
+    # zipcode = IntegerField('Zip Code')  # Make sure to match the field name with your User model
+
+    # card_type = StringField('Card Type')
+    # card_number = IntegerField('Credit Card Number')
+    # expiration_date = StringField('Expiration Date') 
+    # security_code = PasswordField('Security Code')
+
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -65,8 +76,9 @@ class PromoCodeForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class PaymentForm(FlaskForm):
-    card_number = IntegerField('Card Number:', validators=[DataRequired()])
-    expiration_date_m = IntegerField('Expiration Date:', validators=[DataRequired(), Length(2, 2)])
-    expiration_date_Y = IntegerField('Expiration Date:', validators=[DataRequired(), Length(2, 2)])
-    security_code = IntegerField('Security Code:', validators=[DataRequired()])
-    remember_card = BooleanField('Remember Card', validators=[Optional()])
+    card_number = StringField('Card Number:', validators=[DataRequired()])
+    expiration_date_m = StringField('Expiration Date:', validators=[DataRequired()])
+    expiration_date_Y = StringField('Expiration Date:', validators=[DataRequired()])
+    security_code = StringField('Security Code:', validators=[DataRequired()])
+    save_card = BooleanField('Remember Card', validators=[Optional()])
+    submit = SubmitField('Submit')

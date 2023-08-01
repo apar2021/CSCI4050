@@ -133,29 +133,29 @@
 
     <div class="checkout-summary">
       <p>Total: ${{ total }}</p>
-      <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="post">
+      <form action="{{ url_for('views.checkout') }}" method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <fieldset>
-          <legend>Credit Card Information</legend>
-
-          <label for="card_number">Credit Card Number:</label>
-          <input type="text" id="card_number" name="card_number" required>
-
-          <label for="expiration_date">Expiration Date:</label>
-          <input autocomplete="off" name="expiration_date_m" class="exp" id="month" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="MM" type="text" data-pattern-validate required />
-          <input autocomplete="off" name="expiration_date_Y" class="exp" id="year" maxlength="2" pattern="[0-9]*" inputmode="numerical" placeholder="YY" type="text" data-pattern-validate required />
-
-          <label for="security_code">Security Code:</label>
-          <input type="text" id="security_code" name="security_code" required>
-
-          <div>
-          <input type="checkbox" id="save_card" name="save_card" value="save_card">
-          <label for="save_card"> Save Card Information for Future Purchases?</label>
-          </div>
-
+            <legend>Credit Card Information</legend>
+    
+            <label for="card_number">Credit Card Number:</label>
+            <input type="text" id="card_number" name="card_number" value="{{ form.card_number.data }}" required>
+    
+            <label for="expiration_date">Expiration Date:</label>
+            <input type="text" id="expiration_date_m" name="expiration_date_m" required maxlength="2" pattern="\d{2}">
+            <input type="text" id="expiration_date_Y" name="expiration_date_Y" required maxlength="2" pattern="\d{2}">
+    
+            <label for="security_code">Security Code:</label>
+            <input type="text" id="security_code" name="security_code" required>
+    
+            <div>
+                <input type="checkbox" id="save_card" name="save_card">
+                <label for="save_card"> Save Card Information for Future Purchases?</label>
+            </div>
+    
         </fieldset>
-        {{ form.csrf_token }}
-        <button class="checkout-cart" type="submit">Complete Order</button>
-      </form>
+        <button class="checkout-cart" type="submit" name="submit">Complete Order</button>
+    </form>
     </div>
   </section>
 

@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, session, redirect, url_for, flash
-from flask_login import login_required
-from .models import Book
+from flask import Blueprint, render_template, session, redirect, url_for, flash, request
+from flask_login import login_required, current_user
+from .models import Book, Order, Cart, CartItem
 import random
 from .forms import PaymentForm
 views = Blueprint('views', __name__)
@@ -45,6 +45,7 @@ def cart():
 @views.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout():
+    form = PaymentForm()
     cart = session.get('cart', {})
     books = []
     quantities = []
@@ -55,10 +56,21 @@ def checkout():
         quantities.append(quantity)
         total += book.selling_price * quantity
     session["total"] = total
-    form = PaymentForm()
+
+    if request.method == 'GET':
+        form.card_number.data = current_user.decrypt_card_number()
+        form.expiration_date.data = current_user.expiration_date
+        form.security_code.data = current_user.decrypt_security_code()
+
+
     if form.validate_on_submit():
+        session["card_number"] = form.card_number.data
+        session["expiration_date"] = form.expiration_date_m.data + "/" + form.expiration_date_Y.data
+        session["security_code"] = form.security_code.data
+        session["save_card"] = form.save_card.data
+        return redirect(url_for('purchase.checkout_cart'))
+    else:
         # Outputting Errors
-        
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
     return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total, form=form)
@@ -72,8 +84,22 @@ def product(book_id):
 
 # Order History page
 @views.route('/order-history')
+@login_required
 def order_history():
-    return render_template('OrderHistory.html')
+    # Get current user id
+    user_id = current_user.id
+    # Get all orders for the current user
+    orders = Order.query.filter_by(userid=user_id).all()
+    print(len(orders))
+    # Get all the old carts for the current user
+    carts = Cart.query.filter_by(userid=user_id).all()
+    print(len(carts))
+    # Get all the cart items for the old carts
+    cart_items = []
+    for cart in carts:
+        cart_items.append(CartItem.query.filter_by(cartid=cart.id).all())
+
+    return render_template('OrderHistory.html', orders=orders, cart_items=cart_items, zip=zip)
 
 # Admin Panel
 @views.route('/admin-page')
