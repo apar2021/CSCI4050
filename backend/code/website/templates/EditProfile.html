@@ -112,6 +112,18 @@
         {% endif %}
     </ul>
 
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+
     <h1>Edit Profile</h1>
 
     <form method="post" action="{{ url_for('auth.edit_profile') }}">
@@ -137,13 +149,13 @@
                 <input type="text" id="street" name="street" value="{{ form.street.data }}" >
     
                 <label for="city">City:</label>
-                <input type="text" id="city" name="city" value="{{ form.city.data }}" >
+                <input type="text" id="city" name="city" value="{{ form.city.data }}">
     
                 <label for="state">State:</label>
-                <input type="text" id="state" name="state" value="{{ form.state.data }}" >
+                <input type="text" id="state" name="state">
     
                 <label for="zip">Zip Code:</label>
-                <input type="text" id="zipcode" name="zipcode" value="{{ form.zipcode.data }}">
+                <input type="text" id="zipcode" name="zipcode">
             </div>
         </fieldset>
     
@@ -151,16 +163,16 @@
             <div class="section">
                 <legend>Credit Card Information</legend>
                 <label for="card-type">Card Type:</label>
-                <input type="text" id="card-type" name="card_type" value="{{ form.card_type.data }}" >
+                <input type="text" id="card-type" name="card_type" >
     
                 <label for="card-number">Credit Card Number:</label>
-                <input type="text" id="card-number" name="card_number" value="{{ form.card_number.data }}" >
+                <input type="text" id="card-number" name="card_number" >
     
                 <label for="expiration-date">Expiration Date:</label>
                 <input type="text" id="expiration-date" name="expiration_date" value="{{ form.expiration_date.data }}" >
     
                 <label for="security-code">Security Code:</label>
-                <input type="password" id="security-code" name="security_code" class="security-code" value="{{ form.security_code.data }}" >
+                <input type="password" id="security-code" name="security_code" class="security-code" >
             </div>
         </fieldset>
          

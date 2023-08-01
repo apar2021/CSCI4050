@@ -116,6 +116,18 @@
     {% endif %}
   </ul>
 
+  {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+
   <h2>Checkout</h2>
   <div class="checkout-container">
     {% for book, quantity in zip(books, quantities) %}

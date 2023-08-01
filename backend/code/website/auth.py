@@ -208,9 +208,9 @@ def edit_profile():
         form.zipcode.data = current_user.zipcode
 
         form.card_type.data = current_user.card_type
-        form.card_number.data = current_user.decrypt_card_number()
+        #form.card_number.data = current_user.decrypt_card_number()
         form.expiration_date.data = current_user.expiration_date
-        form.security_code.data = current_user.decrypt_security_code()
+        #form.security_code.data = current_user.decrypt_security_code()
     # Validate the form data
     if form.validate_on_submit():
         # Save the changes to the user's profile
