@@ -1,8 +1,181 @@
-{% extends 'home.html'%}
-{% block content %}
-<h2> You searched For: <em>{{searched}}</em></h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
 
-{% else %}
-Sorry your search term: <strong>{{searched}}</strong> was not found...
-{% endif %}
-{% endblock %}
+    body {
+      font-family: sans-serif;
+      margin: 0 auto;
+      width: 1200px;
+      background-color: #F5EACF; /* Updated background color */
+
+
+    }
+
+    header {
+      align-items: center;
+      display: flex;
+      margin-bottom: 25px;
+    }
+
+    nav {
+      margin-left: 30px;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+
+    nav a {
+      color: black;
+      font-weight: bold;
+      display: block;
+      padding: 15px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb {
+      display: flex;
+      list-style: none;
+    }
+
+    .breadcrumb li {
+      padding: 10px;
+    }
+
+    .breadcrumb li:after {
+      content: "/";
+      margin-left: 20px;
+    }
+
+    .breadcrumb li:last-child:after {
+      content: "";
+    }
+
+    .breadcrumb a {
+      color: black;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .intro {
+      margin: 30px 0;
+      padding-left: 10px;
+      width: 50%;
+    }
+
+    .intro h1 {
+      margin-bottom: 15px;
+    }
+
+    .intro p {
+      line-height: 1.5;
+    }
+
+    ul.horizontal-menu {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #8A584C;
+    }
+
+    ul.horizontal-menu li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    ul.horizontal-menu li a {
+      display: block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    ul.horizontal-menu li a:hover {
+      background-color: #70463e;
+    }
+
+    .search-form {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .search-form input[type="text"] {
+      width: 150px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .search-form select {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .search-form button[type="submit"] {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-form button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <ul class="horizontal-menu">
+    <li><a href="{{ url_for('views.home') }}">Home</a></li>
+    <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+    {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('views.home') }}">Checkout</a></li>
+      <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+      <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+      <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+      <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+      <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+    {% endif %}
+    <li class="search-form">
+      <form id="search-form" action="/search" method="GET">
+        <input type="text" id="search-input" name="query" placeholder="Search..." required>
+        <select id="search-criteria" name="criteria">
+          <option value="title">Search by Title</option>
+          <option value="author">Search by Author</option>
+          <option value="genre">Search by Genre</option>
+          <option value="ISBN">Search by ISBN</option>
+        </select>
+        <button type="submit">Search</button>
+      </form>
+    </li>
+  </ul> 
+ <h2>Search Results for "{{ query }}"</h2>
+    <ul>
+        {% for result in results %}
+        <li>{{ result }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
