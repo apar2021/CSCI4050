@@ -43,22 +43,130 @@
     input[type="submit"]:hover {
       background-color: #45a049;
     }
+    ul.horizontal-menu {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #8A584C;
+    }
+
+    ul.horizontal-menu li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    ul.horizontal-menu li a {
+      display: block;
+      color: #fff;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    ul.horizontal-menu li a:hover {
+      background-color: #70463e;
+    }
+
+        /* CSS for displaying search results in a grid */
+    .product-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      max-width: 1000px;
+    }
+    .product-card {
+      width: 17%;
+      margin-bottom: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 20px;
+    }
+    .product-image {
+      width: 100%;
+      height: auto;
+      max-height: 200px; /* Adjust the maximum height as needed */
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
+    .product-card h2 {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+    .product-card p {
+      margin: 8px 0;
+    }
+    .product-card button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .product-card button:hover {
+      background-color: #45a049;
+    }
+    .product-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
   </style>
 </head>
 <body>
+  <ul class="horizontal-menu">
+    <li><a href="{{ url_for('views.home') }}">Home</a></li>
+    <li><a href="{{ url_for('views.cart') }}">Cart</a></li>
+    {% if current_user.is_authenticated %}
+    {% if current_user.is_admin %}
+    <li><a href="{{ url_for('views.admin_page') }}">Admin Page</a></li>
+    <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+    <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+    {% else %}
+    <li><a href="{{ url_for('auth.edit_profile') }}">Edit Profile</a></li>
+    <li><a href="{{ url_for('views.order_history') }}">Order History</a></li>
+    {% endif %}
+    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
+    {% else %}
+    <li><a href="{{ url_for('auth.signup') }}">Register</a></li>
+    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
+    {% endif %}
+  </ul>
+
   <h1>Search View</h1>
   
-  <form id="search-form" action="/search" method="GET">
+  <form id="search-form" action="{{ url_for('search.lookup') }}" method="GET">
     <input type="text" id="search-input" name="query" placeholder="Search..." required>
-    
     <select id="search-criteria" name="criteria">
       <option value="title">Search by Title</option>
       <option value="author">Search by Author</option>
       <option value="genre">Search by Genre</option>
       <option value="ISBN">Search by ISBN</option>
     </select>
-    
     <button type="submit">Search</button>
   </form>
+
+
+  <div class="product-wrapper">
+    <div class="product-container">
+    {% for book in books %}
+  <div class="product-card">
+    <img src="{{ book.image_url }}" alt="" />
+    <h2><a href="{{ url_for('views.product', book_id=book.id) }}">{{ book.title }}</a></h2>
+    <p class="current-price">Price you pay: <span>${{ book.selling_price }}</span></p>
+    <form action="{{ url_for('purchase.add_to_cart', book_id=book.id) }}" method="POST">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="add-to-cart" type="submit">Add to Cart</button>
+    </form>
+  </div>
+  {% endfor %}
+</div>
+</div>
+
 </body>
 </html>

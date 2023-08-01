@@ -1,9 +1,10 @@
-from flask import Blueprint, flash, redirect, url_for, session
+from flask import Blueprint, flash, redirect, url_for, session, request
 from flask_login import current_user, login_required
 from flask_mail import Message
 from .models import Book, CartItem, Cart, Order, User
 from . import db, mail
 from datetime import datetime
+import secrets
 
 purchase = Blueprint('purchase', __name__)
 
@@ -28,6 +29,31 @@ def add_to_cart(book_id, quantity=1):
     flash('The book has been added to your cart.', 'success')
     return redirect(url_for('views.home'))
 
+@purchase.route('/update_cart', methods=['POST'])
+@login_required
+def update_cart():
+    cart = session.get('cart', {})
+    
+    for book_id, quantity in cart.items():
+        quantity_key = f'quantity_{book_id}'
+        new_quantity = request.form.get(quantity_key)
+        
+        if new_quantity is not None:
+            new_quantity = int(new_quantity)
+            # Get the book from the database
+            book = Book.query.get_or_404(book_id)
+            
+            # Check if the requested quantity is available
+            if new_quantity <= book.quantity:
+                cart[book_id] = new_quantity
+            else:
+                flash(f"Sorry, there are only {book.quantity} copies available for '{book.title}'.", 'error')
+    
+    session['cart'] = cart
+    flash('Cart updated successfully!', 'success')
+    print(cart)
+    return redirect(url_for('views.cart'))
+
 
 @purchase.route('/remove_from_cart/<int:book_id>', methods=['POST'])
 @login_required
@@ -35,9 +61,10 @@ def remove_from_cart(book_id):
     cart = session.get('cart', {})
     book_id = str(book_id)
     if book_id in cart:
+        book = Book.query.get_or_404(book_id)
         del cart[book_id]
         session['cart'] = cart
-        flash('The book has been removed from your cart.', 'success')
+        flash(f"The book '{book.title}' has been removed from your cart.", 'success')
     return redirect(url_for('views.cart'))
   
 @purchase.route('/checkout_cart', methods=['GET', 'POST'])
@@ -95,13 +122,39 @@ def checkout_cart():
     session['security_code'] = None
     session['save_card'] = False
 
-    # Generate a confirmation code
-    # Send the verification email
-    msg = Message('Account Verification', sender='your_gmail_username', recipients=[current_user.email])
-    msg.body = f'You Ordered!'
-    mail.send(msg)
+    send_order_confirmation_email(cart, order)
 
     return redirect(url_for('views.home'))
+
+
+
+def send_order_confirmation_email(cart, order):
+    subject = 'Order Confirmation'
+    sender = 'your_gmail_username'
+    recipients = [current_user.email]
+
+    confirmation_code = secrets.token_hex(4).upper() 
+
+    # Create a formatted message body with order details
+    msg_body = f"Dear {current_user.name},\n\nThank you for your order!\n\nOrder Details:\n"
+
+    items = CartItem.query.filter_by(cartid=cart.id).all()
+
+    for item in items:
+        book = Book.query.get(item.bookid)
+        msg_body += f"- {book.title} (Quantity: {item.quantity})\n"
+
+
+    msg_body += f"\nTotal Price: ${order.total_price}\n\nIf you have any questions or concerns, please don't hesitate to contact us.\n\nBest regards,\nThe Bookstore Team"
+
+    msg_body += f"Confirmation Code: {confirmation_code}\n\n"
+    
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = msg_body
+    mail.send(msg)
+
+
+
 
 @purchase.route('/orders')
 @login_required

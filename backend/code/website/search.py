@@ -21,5 +21,5 @@ def lookup():
         # Handle other search criteria if needed
         books = []
 
-    print(books[0].title)
-    return render_template('Home.html', books=books)
+    #print(books[0].title)
+    return render_template('SearchView.html', books=books)

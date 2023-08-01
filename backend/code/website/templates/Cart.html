@@ -133,26 +133,29 @@
   <h1>Cart</h1>
 
   <div class="cart-item">
-    {% for book, quantity in zip(books, quantities) %}
-    <div class="cart-item-details">
-      <h3>{{ book.title}}</h3>
-      <p>Author: {{ book.author}}</p>
-      <p>Price: ${{ book.selling_price }}</p>
-    </div>
-    
-    <label for="quantity">Quantity:</label>
-    <input class="quantity-input" type="number" id="quantity" value="{{quantity}}">
-    
-
-    <form action="{{ url_for('purchase.remove_from_cart', book_id=book.id) }}" method="POST">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button class="remove-from-cart" type="submit">Remove from Cart</button>
-    </form>
-    {% endfor %}
+      <form action="{{ url_for('purchase.update_cart') }}" method="POST">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          {% for book, quantity in zip(books, quantities) %}
+          <div class="cart-item-details">
+              <h3>{{ book.title }}</h3>
+              <p>Author: {{ book.author }}</p>
+              <p>Price: ${{ book.selling_price }}</p>
+          </div>
+  
+          <label for="quantity_{{ book.id }}">Quantity:</label>
+          <input class="quantity-input" type="number" name="quantity_{{ book.id }}" value="{{ quantity }}" min="1">
+  
+          <input type="hidden" name="book_id_{{ book.id }}" value="{{ book.id }}">
+          <button class="update-cart" type="submit">Update Cart</button>
+  
+          <button formaction="{{ url_for('purchase.remove_from_cart', book_id=book.id) }}"
+              class="remove-from-cart" type="submit">Remove from Cart</button>
+          {% endfor %}
+      </form>
   </div>
-
+  
   <!-- Add more cart items if necessary -->
-    
-    <button class="checkout-button"><a href="{{ url_for('views.checkout') }}" style="color: white; text-decoration: none;">Proceed to Checkout</a></button>
+  
+  <button class="checkout-button"><a href="{{ url_for('views.checkout') }}" style="color: white; text-decoration: none;">Proceed to Checkout</a></button>
 </body>
 </html>
