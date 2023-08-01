@@ -1,9 +1,10 @@
 import pandas as pd
 import os
 import sqlite3 as sql
-path = "C:/Users/cownj/OneDrive/Desktop/4050/CSCI4050Project/backend/code"
-db_path = "C:/Users/cownj/OneDrive/Desktop/4050/CSCI4050Project/backend/code/instance/database.db"
-
+#path = "C:/Users/cownj/OneDrive/Desktop/4050/CSCI4050Project/backend/code"
+path = 'C:/Users/eric/codingProjects/bookstore_website/CSCI4050Project/backend/code'
+#db_path = "C:/Users/cownj/OneDrive/Desktop/4050/CSCI4050Project/backend/code/instance/database.db"
+db_path = 'C:/Users/eric/codingProjects/bookstore_website/CSCI4050Project/backend/code/instance/database.db'
 # Print Current working directory
 #print(os.getcwd())
 

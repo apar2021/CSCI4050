@@ -10,15 +10,15 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
-    # street = StringField('Street')
-    # city = StringField('City')
-    # state = StringField('State')
-    # zipcode = IntegerField('Zip Code')  # Make sure to match the field name with your User model
+    street = StringField('Street', validators=[Optional()])
+    city = StringField('City', validators=[Optional()])
+    state = StringField('State', validators=[Optional()])
+    zipcode = IntegerField('Zip Code', validators=[Optional()])  # Make sure to match the field name with your User model
 
-    # card_type = StringField('Card Type')
-    # card_number = IntegerField('Credit Card Number')
-    # expiration_date = StringField('Expiration Date') 
-    # security_code = PasswordField('Security Code')
+    card_type = StringField('Card Type', validators=[Optional()])
+    card_number = IntegerField('Credit Card Number', validators=[Optional()])
+    expiration_date = StringField('Expiration Date', validators=[Optional()]) 
+    security_code = PasswordField('Security Code', validators=[Optional()])
 
 
 class LoginForm(FlaskForm):
@@ -40,15 +40,15 @@ class EditProfileForm(FlaskForm):
     phone = StringField('Phone', validators=[DataRequired()])
     password = PasswordField('Password', validators=[Optional()])
 
-    street = StringField('Street')
-    city = StringField('City')
-    state = StringField('State')
-    zipcode = IntegerField('Zip Code')  # Make sure to match the field name with your User model
+    street = StringField('Street', validators=[Optional()])
+    city = StringField('City', validators=[Optional()])
+    state = StringField('State', validators=[Optional()])
+    zipcode = IntegerField('Zip Code', validators=[Optional()])  # Make sure to match the field name with your User model
 
-    card_type = StringField('Card Type')
-    card_number = IntegerField('Credit Card Number')
-    expiration_date = StringField('Expiration Date') 
-    security_code = PasswordField('Security Code')
+    card_type = StringField('Card Type', validators=[Optional()])
+    card_number = IntegerField('Credit Card Number', validators=[Optional()])
+    expiration_date = StringField('Expiration Date', validators=[Optional()]) 
+    security_code = PasswordField('Security Code', validators=[Optional()])
 
     submit = SubmitField('Save Changes')
 
