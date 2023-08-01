@@ -16,10 +16,8 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
-    print("AAAAAAAAAAAA: ", form.email.data)
     # Check if form is valid
     if form.validate_on_submit():
-        print("BBBBBBBBB: ", form.email.data)
         # Check if the user exists in the database
         user = User.query.filter_by(email=form.email.data).first()
         # Check if the password is correct
@@ -43,7 +41,6 @@ def login():
         # Outputting Errors
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
-    print("CCCCCCCCC: ", form.email.data)
     return render_template('Login.html', form = form)
 
 # Method to verify a user's registration information and create a new user

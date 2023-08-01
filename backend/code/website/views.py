@@ -56,17 +56,23 @@ def checkout():
         quantities.append(quantity)
         total += book.selling_price * quantity
     session["total"] = total
-    print("Form Data1:", request.form)
-    print("Card Number:", request.form.get("card_number"))
+
+    if request.method == 'GET':
+        form.card_number.data = current_user.decrypt_card_number()
+        form.expiration_date.data = current_user.expiration_date
+        form.security_code.data = current_user.decrypt_security_code()
+
+
     if form.validate_on_submit():
-        print("Form Data2:", request.form)
-        print("Card Number:", request.form.get("card_number"))
+        session["card_number"] = form.card_number.data
+        session["expiration_date"] = form.expiration_date_m.data + "/" + form.expiration_date_Y.data
+        session["security_code"] = form.security_code.data
+        session["save_card"] = form.save_card.data
+        return redirect(url_for('purchase.checkout_cart'))
     else:
         # Outputting Errors
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
-    print("Form Data3:", request.form)
-    print("Card Number:", request.form.get("card_number"))
     return render_template('Checkout.html', books=books, quantities=quantities, zip=zip, total=total, form=form)
 
 # Product page
