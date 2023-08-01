@@ -16,8 +16,10 @@ auth = Blueprint('auth', __name__)
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
+    print("AAAAAAAAAAAA: ", form.email.data)
     # Check if form is valid
     if form.validate_on_submit():
+        print("BBBBBBBBB: ", form.email.data)
         # Check if the user exists in the database
         user = User.query.filter_by(email=form.email.data).first()
         # Check if the password is correct
@@ -29,6 +31,7 @@ def login():
                     flash('Login successful!', 'success')
                     return redirect(url_for('views.admin_page'))
                 login_user(user)
+                # Initialize the user's cart on login
                 session["cart"] = {}
                 flash('Login successful!', 'success')
                 return redirect(url_for('views.home'))
@@ -40,7 +43,7 @@ def login():
         # Outputting Errors
         for error, message in zip(form.errors.keys(), form.errors.values()):
             flash(f'{error.capitalize()} Error: {message[0]}')
-
+    print("CCCCCCCCC: ", form.email.data)
     return render_template('Login.html', form = form)
 
 # Method to verify a user's registration information and create a new user
@@ -251,23 +254,23 @@ def edit_profile():
             flash(f'{error.capitalize()} Error: {message[0]}')
         return render_template('EditProfile.html', form=form)
 
-# #way to search given criteria - not an advisable option in this case
-# @auth.route('/search',methods=["GET"])
-# def search():
-    query = request.args.get('query')
-    criteria = request.args.get('criteria')
+# # #way to search given criteria - not an advisable option in this case
+# # @auth.route('/search',methods=["GET"])
+# # def search():
+#     query = request.args.get('query')
+#     criteria = request.args.get('criteria')
 
-    # Perform search based on the chosen criteria
-    if criteria == 'title':
-        books = Book.query.filter(Book.title.ilike(f"%{query}%")).all()
-    elif criteria == 'author':
-        books = Book.query.filter(Book.author.ilike(f"%{query}%")).all()
-    elif criteria == 'isbn':
-        books = Book.query.filter(Book.isbn == query).all()
-    # Add more conditions for other search criteria as needed
+#     # Perform search based on the chosen criteria
+#     if criteria == 'title':
+#         books = Book.query.filter(Book.title.ilike(f"%{query}%")).all()
+#     elif criteria == 'author':
+#         books = Book.query.filter(Book.author.ilike(f"%{query}%")).all()
+#     elif criteria == 'isbn':
+#         books = Book.query.filter(Book.isbn == query).all()
+#     # Add more conditions for other search criteria as needed
 
-    return render_template('search_results.html', books=books)
-    # not an ideal way to proceed in this case
-    # keep this in mind 
+#     return render_template('search_results.html', books=books)
+#     # not an ideal way to proceed in this case
+#     # keep this in mind 
                                 
             

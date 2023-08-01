@@ -41,7 +41,7 @@ def remove_from_cart(book_id):
   
 @purchase.route('/checkout_cart', methods=['POST'])
 @login_required
-def checkout_cart(form):
+def checkout_cart():
     cart_session = session.get('cart', {})
     total = session.get('total', 0.00)
     if len(cart_session) == 0:
@@ -74,7 +74,7 @@ def checkout_cart(form):
     db.session.commit()
     # Clear the session cart
     session['cart'] = {}
-    return redirect(url_for('views.home'))
+    return redirect(url_for('views.checkout'))
 
 @purchase.route('/orders')
 @login_required

@@ -133,7 +133,7 @@
 
     <div class="checkout-summary">
       <p>Total: ${{ total }}</p>
-      <form action="{{ url_for('purchase.checkout_cart', form=form) }}" method="post">
+      <form action="{{ url_for('purchase.checkout_cart') }}" method="post">
         <fieldset>
           <legend>Credit Card Information</legend>
 
@@ -148,13 +148,13 @@
           <input type="text" id="security_code" name="security_code" required>
 
           <div>
-          <input type="checkbox" id="save_card" name="save_card" value="save_card">
+          <input type="checkbox" id="save_card" name="remember_card" value="save_card">
           <label for="save_card"> Save Card Information for Future Purchases?</label>
           </div>
 
         </fieldset>
         {{ form.csrf_token }}
-        <button class="checkout-cart" type="submit">Complete Order</button>
+        <button class="checkout-cart" type="submit" name="submit">Complete Order</button>
       </form>
     </div>
   </section>

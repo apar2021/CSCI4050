@@ -10,6 +10,17 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
 
+    street = StringField('Street')
+    city = StringField('City')
+    state = StringField('State')
+    zipcode = IntegerField('Zip Code')  # Make sure to match the field name with your User model
+
+    card_type = StringField('Card Type')
+    card_number = IntegerField('Credit Card Number')
+    expiration_date = StringField('Expiration Date') 
+    security_code = PasswordField('Security Code')
+
+
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -70,3 +81,4 @@ class PaymentForm(FlaskForm):
     expiration_date_Y = IntegerField('Expiration Date:', validators=[DataRequired(), Length(2, 2)])
     security_code = IntegerField('Security Code:', validators=[DataRequired()])
     remember_card = BooleanField('Remember Card', validators=[Optional()])
+    submit = SubmitField('Submit')
