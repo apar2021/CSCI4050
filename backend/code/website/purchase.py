@@ -103,21 +103,20 @@ def checkout_cart():
         db.session.commit()
     
     promo = session.get('promo_code', None)
+    promotion = None
     if promo:
         promo = Promotion.query.filter_by(promo_code=session.get('promo_code')).first()
         if promo:
             if promo.start_date <= datetime.now() <= promo.expiration_date:
                 total = total - (total * (promo.percentage * 0.01))
+                promotion = promo.id
             else:
                 flash('Promo code is expired.', 'error')
                 return redirect(url_for('views.home'))
-        else:
-            flash('Promo code is invalid.', 'error')
-            return redirect(url_for('views.home'))
 
 
     # Create an order instance for the cart
-    order = Order(userid=current_user.id, cartid=cart.id, card_number=session.get("card_number"), total_price=total, promotionid=promo.id, order_date=datetime.now())
+    order = Order(userid=current_user.id, cartid=cart.id, card_number=session.get("card_number"), total_price=total, promotionid=promotion, order_date=datetime.now())
     # Encrypt the card number and security code
     if session.get('card_number', None):
         order.card_number = user.encrypt(str(session.get("card_number")))
